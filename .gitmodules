@@ -1,0 +1,6 @@
+[submodule "firmware/common/opsy"]
+	path = firmware/common/opsy
+	url = https://github.com/Otatiaro/OpSy
+[submodule "firmware/common/maestro"]
+	path = firmware/common/maestro
+	url = https://github.com/Otatiaro/Maestro
