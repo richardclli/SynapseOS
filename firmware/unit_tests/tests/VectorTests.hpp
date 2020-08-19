@@ -170,7 +170,7 @@ public:
 
 		auto minus = -v;
 		for(auto i = 0U; i<Size; ++i)
-			assert(minus[i] = -v[i]);
+			assert(minus[i] == -v[i]);
 	}
 
 	template<std::size_t Size>

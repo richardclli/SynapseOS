@@ -91,6 +91,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   runAllTests();
+  __BKPT(0);
 
   /* USER CODE END 2 */
 
