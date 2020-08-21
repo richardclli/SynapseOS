@@ -7,6 +7,10 @@
 
 #include <Callback.hpp>
 
+/**
+ * A buffer class
+ * @tparam ItemType The type of the buffer items
+ */
 template<typename ItemType>
 class Buffer
 {

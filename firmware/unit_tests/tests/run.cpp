@@ -3,6 +3,7 @@
 #include "SlopeVectorTest.hpp"
 #include "BiquadTests.hpp"
 #include "BufferTests.hpp"
+#include "AllocatorTests.hpp"
 
 extern "C"
 {
@@ -88,6 +89,12 @@ extern "C"
 		BufferTests::CheckDestructor();
 	}
 
+	void runAllocatorTests()
+	{
+		AllocatorTests::SimpleTest();
+		AllocatorTests::Coaslesce();
+		AllocatorTests::BufferAllocation();
+	}
 
 	void runAllTests()
 	{
@@ -96,6 +103,7 @@ extern "C"
 		runSlopeVectorTests();
 		runBiquadTests();
 		runBufferTests();
+		runAllocatorTests();
 	}
 
 }
