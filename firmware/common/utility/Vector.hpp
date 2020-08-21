@@ -343,7 +343,7 @@ public:
 	 * @param right The @c Vector to add to the current one
 	 * @return The @c Vector containing the sum of the two vectors
 	 */
-	constexpr Vector operator+(const Vector& right)
+	constexpr Vector operator+(const Vector& right) const
 	{
 		return construct([](const ItemType& l, const ItemType& r){return l+r;}, m_values, right.m_values);
 	}
@@ -353,7 +353,7 @@ public:
 	 * @param right The @c Vector to subtracts to the current one
 	 * @return The @c Vector containing the subtraction of the two vectors
 	 */
-	constexpr Vector operator-(const Vector& right)
+	constexpr Vector operator-(const Vector& right) const
 	{
 		return construct([](const ItemType& l, const ItemType& r){return l-r;}, m_values, right.m_values);
 	}
@@ -364,7 +364,7 @@ public:
 	 * @param factor The multiplying factor
 	 * @return The current @c Vector multiplied by the factor
 	 */
-	constexpr Vector operator*(const ItemType& factor)
+	constexpr Vector operator*(const ItemType& factor) const
 	{
 		return construct([](const ItemType& l, const ItemType& r){return l*r;}, m_values, factor);
 	}
@@ -374,7 +374,7 @@ public:
 	 * @param factor The dividing factor
 	 * @return The current @c Vector divided by the factor
 	 */
-	constexpr Vector operator/(const ItemType& factor)
+	constexpr Vector operator/(const ItemType& factor) const
 	{
 		return construct([](const ItemType& l, const ItemType& r){return l/r;}, m_values, factor);
 	}
@@ -384,7 +384,7 @@ public:
 	 * @param right The @c Vector to compare to
 	 * @return @c true if both vectors are identical, @c false otherwise
 	 */
-	constexpr bool operator==(const Vector &right)
+	constexpr bool operator==(const Vector &right) const
 	{
 		for(auto i = 0U; i<Size; ++i)
 			if(m_values[i] != right[i])
@@ -451,6 +451,13 @@ private:
 	}
 
 };
+
+
+template<std::size_t Size, typename ItemType>
+constexpr auto operator*(const ItemType& factor, const Vector<Size, ItemType>& vector)
+{
+	return vector * factor;
+}
 
 /**
  * Creates the image of the @c Vector by the rotation of a specified angle

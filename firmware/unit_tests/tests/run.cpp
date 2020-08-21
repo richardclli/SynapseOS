@@ -1,5 +1,6 @@
 #include "SlopeTests.hpp"
 #include "VectorTests.hpp"
+#include "SlopeVectorTest.hpp"
 
 extern "C"
 {
@@ -62,11 +63,25 @@ extern "C"
 		VectorTests::Opposite<100>();
 	}
 
+	void runSlopeVectorTests()
+	{
+		SlopeVectorTest::Constant<4>();
+		SlopeVectorTest::Constant<5>();
+		SlopeVectorTest::Constant<6>();
+		SlopeVectorTest::Constant<100>();
+
+		SlopeVectorTest::Gradient<4>();
+		SlopeVectorTest::Gradient<5>();
+		SlopeVectorTest::Gradient<6>();
+		SlopeVectorTest::Gradient<100>();
+	}
+
 
 	void runAllTests()
 	{
 		runSlopeTests();
 		runVectorTests();
+		runSlopeVectorTests();
 	}
 
 }
