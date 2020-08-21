@@ -1,6 +1,7 @@
 #include "SlopeTests.hpp"
 #include "VectorTests.hpp"
 #include "SlopeVectorTest.hpp"
+#include "BiquadTests.hpp"
 
 extern "C"
 {
@@ -76,12 +77,18 @@ extern "C"
 		SlopeVectorTest::Gradient<100>();
 	}
 
+	void runBiquadTests()
+	{
+		BiquadTests::VectorReset();
+	}
+
 
 	void runAllTests()
 	{
 		runSlopeTests();
 		runVectorTests();
 		runSlopeVectorTests();
+		runBiquadTests();
 	}
 
 }

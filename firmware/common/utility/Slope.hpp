@@ -11,7 +11,7 @@
  * @tparam CoefficientType The type of the coefficient, by default the same as @c ValueType
  * @warning Introduces a mean delay of Depth/2 samples
  */
-template<std::size_t Depth, typename ValueType = float, typename CoefficientType = ValueType>
+template<std::size_t Depth, typename ValueType = float, typename CoefficientType = float>
 class Slope
 {
 	static_assert(Depth >= 4, "For Depth below 4, this algorithm is less efficient than a normal differential");
