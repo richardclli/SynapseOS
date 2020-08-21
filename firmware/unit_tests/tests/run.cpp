@@ -2,6 +2,7 @@
 #include "VectorTests.hpp"
 #include "SlopeVectorTest.hpp"
 #include "BiquadTests.hpp"
+#include "BufferTests.hpp"
 
 extern "C"
 {
@@ -82,6 +83,11 @@ extern "C"
 		BiquadTests::VectorReset();
 	}
 
+	void runBufferTests()
+	{
+		BufferTests::CheckDestructor();
+	}
+
 
 	void runAllTests()
 	{
@@ -89,6 +95,7 @@ extern "C"
 		runVectorTests();
 		runSlopeVectorTests();
 		runBiquadTests();
+		runBufferTests();
 	}
 
 }
