@@ -4,6 +4,7 @@
 #include "BiquadTests.hpp"
 #include "BufferTests.hpp"
 #include "AllocatorTests.hpp"
+#include "EepromSimulationTests.hpp"
 
 extern "C"
 {
@@ -96,6 +97,14 @@ extern "C"
 		AllocatorTests::BufferAllocation();
 	}
 
+	void runEepromSimulationTests()
+	{
+		EepromSimulationTests::NoOverflow();
+		EepromSimulationTests::Overflow();
+		EepromSimulationTests::Flood();
+		EepromSimulationTests::Split();
+	}
+
 	void runAllTests()
 	{
 		runSlopeTests();
@@ -104,6 +113,7 @@ extern "C"
 		runBiquadTests();
 		runBufferTests();
 		runAllocatorTests();
+		runEepromSimulationTests();
 	}
 
 }
