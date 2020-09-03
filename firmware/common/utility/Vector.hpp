@@ -106,9 +106,11 @@ public:
 	 */
 	constexpr ItemType norm() const
 	{
+		// should use return std::transform_reduce here but not yet available in the library
+
 		auto result = ItemType();
 
-		for(auto i = 0u; i<Size; ++i)
+		for(auto i = 0U; i<Size; ++i)
 			result += this->operator [](i) * this->operator [](i);
 
 		return result;
@@ -386,10 +388,7 @@ public:
 	 */
 	constexpr bool operator==(const Vector &right) const
 	{
-		for(auto i = 0U; i<Size; ++i)
-			if(m_values[i] != right[i])
-				return false;
-		return true;
+		return m_values == right.m_values;
 	}
 
 private:
@@ -501,7 +500,7 @@ auto dotProduct(const Vector<Size, ItemType>& left, const Vector<Size, ItemType>
 {
 	ItemType result = ItemType();
 
-	for(auto i = 0u; i<Size; ++i)
+	for (auto i = 0U; i < Size; ++i)
 		result += left[i] * right[i];
 
 	return result;

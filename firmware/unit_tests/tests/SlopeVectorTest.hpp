@@ -25,7 +25,7 @@ public:
 	template<std::size_t Size>
 	static void Gradient()
 	{
-		Slope<Size, Vector<3>, float> slope{1.f};
+		Slope<Size, Vector<3>> slope{1.f};
 		const auto v = Vector<3>{1.f, 2.f, 3.f};
 
 		for(auto i = 0U; i<Size; ++i)

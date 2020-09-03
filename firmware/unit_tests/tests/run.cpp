@@ -1,6 +1,10 @@
 #include "SlopeTests.hpp"
 #include "VectorTests.hpp"
 #include "SlopeVectorTest.hpp"
+#include "BiquadTests.hpp"
+#include "BufferTests.hpp"
+#include "AllocatorTests.hpp"
+#include "EepromSimulationTests.hpp"
 
 extern "C"
 {
@@ -76,12 +80,40 @@ extern "C"
 		SlopeVectorTest::Gradient<100>();
 	}
 
+	void runBiquadTests()
+	{
+		BiquadTests::VectorReset();
+	}
+
+	void runBufferTests()
+	{
+		BufferTests::CheckDestructor();
+	}
+
+	void runAllocatorTests()
+	{
+		AllocatorTests::SimpleTest();
+		AllocatorTests::Coaslesce();
+		AllocatorTests::BufferAllocation();
+	}
+
+	void runEepromSimulationTests()
+	{
+		EepromSimulationTests::NoOverflow();
+		EepromSimulationTests::Overflow();
+		EepromSimulationTests::Flood();
+		EepromSimulationTests::Split();
+	}
 
 	void runAllTests()
 	{
 		runSlopeTests();
 		runVectorTests();
 		runSlopeVectorTests();
+		runBiquadTests();
+		runBufferTests();
+		runAllocatorTests();
+		runEepromSimulationTests();
 	}
 
 }
