@@ -33,6 +33,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>embedded</name>
+			<type>2</type>
+			<locationURI>PARENT-1-PROJECT_LOC/common/maestro/embedded</locationURI>
+		</link>
+		<link>
 			<name>opsy</name>
 			<type>2</type>
 			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/common/opsy/src</locationURI>

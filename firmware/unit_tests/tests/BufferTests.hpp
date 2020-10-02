@@ -12,7 +12,7 @@ public:
 
 		{
 			// create a new scope so that the buffer will be destroyed at scope exit
-			Buffer<uint8_t> b{nullptr, 0, [&](uint8_t*, std::size_t){flag = true;}};
+			maestro::Buffer<uint8_t> b{nullptr, 0, [&](uint8_t*, std::size_t){flag = true;}};
 		}
 
 		assert(flag);
