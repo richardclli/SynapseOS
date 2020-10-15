@@ -43,7 +43,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -81,7 +81,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -119,7 +119,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -157,7 +157,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 128;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -195,7 +195,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 132;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -233,7 +233,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 136;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -271,7 +271,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 256;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -309,7 +309,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 260;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -347,7 +347,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 264;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -385,7 +385,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 384;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -423,7 +423,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 388;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -461,7 +461,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 392;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -499,7 +499,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 512;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -537,7 +537,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 516;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -575,7 +575,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 520;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -673,7 +673,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 768;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -771,7 +771,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 772;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -869,7 +869,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 776;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -967,7 +967,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 780;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1065,7 +1065,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 784;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1163,7 +1163,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 788;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1261,7 +1261,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 792;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1359,7 +1359,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 796;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1457,7 +1457,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 800;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1555,7 +1555,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 804;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1653,7 +1653,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 808;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1751,7 +1751,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 812;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1849,7 +1849,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 816;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1947,7 +1947,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 820;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2045,7 +2045,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 824;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2143,7 +2143,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 828;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2241,7 +2241,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 832;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2339,7 +2339,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 836;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2437,7 +2437,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 840;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2535,7 +2535,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 844;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2658,7 +2658,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2670,8 +2670,8 @@ private:
 static_assert(std::is_standard_layout_v<nvic_stir_p>);
 static_assert(offsetof(nvic_stir_p, stir) == nvic_stir_p::stir_r::Offset);
 
-nvic_p& nvic = *reinterpret_cast<nvic_p*>(0xE000E100);
-nvic_stir_p& nvic_stir = *reinterpret_cast<nvic_stir_p*>(0xE000EF00);
+inline nvic_p& nvic = *reinterpret_cast<nvic_p*>(0xE000E100);
+inline nvic_stir_p& nvic_stir = *reinterpret_cast<nvic_stir_p*>(0xE000EF00);
 
-}; // STM32F401
+} // STM32F401
 

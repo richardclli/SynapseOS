@@ -253,7 +253,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0b10000011;
+	static constexpr uint32_t ResetValue = 0b10000011; // 131 0x83
 
 private:
 	uint32_t m_value;
@@ -267,73 +267,20 @@ public:
 /**
  * Main PLL (PLL) division factor for USB OTG FS, SDIO and random number generator clocks
  */
-class pllq3_f {
-public:
-	static constexpr std::size_t Offset = 27;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr pllq3_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) division factor for USB OTG FS, SDIO and random number generator clocks
- */
-class pllq2_f {
-public:
-	static constexpr std::size_t Offset = 26;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr pllq2_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) division factor for USB OTG FS, SDIO and random number generator clocks
- */
-class pllq1_f {
-public:
-	static constexpr std::size_t Offset = 25;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr pllq1_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) division factor for USB OTG FS, SDIO and random number generator clocks
- */
-class pllq0_f {
+class pllq_f {
 public:
 	static constexpr std::size_t Offset = 24;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
+	static constexpr std::size_t Width = 4;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111);
+	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
 
-	constexpr pllq0_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
+	constexpr pllq_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator pllcfgr_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
 	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
 
 private:
-	 bool m_value;
+	 uint8_t m_value;
 };
 
 /**
@@ -357,331 +304,65 @@ private:
 /**
  * Main PLL (PLL) division factor for main system clock
  */
-class pllp1_f {
-public:
-	static constexpr std::size_t Offset = 17;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr pllp1_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) division factor for main system clock
- */
-class pllp0_f {
+class pllp_f {
 public:
 	static constexpr std::size_t Offset = 16;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
+	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
 
-	constexpr pllp0_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
+	constexpr pllp_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator pllcfgr_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
 	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
 
 private:
-	 bool m_value;
+	 uint8_t m_value;
 };
 
 /**
  * Main PLL (PLL) multiplication factor for VCO
  */
-class plln8_f {
-public:
-	static constexpr std::size_t Offset = 14;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr plln8_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) multiplication factor for VCO
- */
-class plln7_f {
-public:
-	static constexpr std::size_t Offset = 13;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr plln7_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) multiplication factor for VCO
- */
-class plln6_f {
-public:
-	static constexpr std::size_t Offset = 12;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr plln6_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) multiplication factor for VCO
- */
-class plln5_f {
-public:
-	static constexpr std::size_t Offset = 11;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr plln5_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) multiplication factor for VCO
- */
-class plln4_f {
-public:
-	static constexpr std::size_t Offset = 10;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr plln4_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) multiplication factor for VCO
- */
-class plln3_f {
-public:
-	static constexpr std::size_t Offset = 9;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr plln3_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) multiplication factor for VCO
- */
-class plln2_f {
-public:
-	static constexpr std::size_t Offset = 8;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr plln2_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) multiplication factor for VCO
- */
-class plln1_f {
-public:
-	static constexpr std::size_t Offset = 7;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr plln1_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Main PLL (PLL) multiplication factor for VCO
- */
-class plln0_f {
+class plln_f {
 public:
 	static constexpr std::size_t Offset = 6;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
+	static constexpr std::size_t Width = 9;
+	static constexpr uint16_t Range = static_cast<uint16_t>(0b111111111);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
 
-	constexpr plln0_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
+	constexpr plln_f(uint16_t value) : m_value(value & Range) {}
+	constexpr operator uint16_t() const {return m_value;}
+	constexpr operator pllcfgr_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
 	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
 
 private:
-	 bool m_value;
+	 uint16_t m_value;
 };
 
 /**
  * Division factor for the main PLL (PLL) and audio PLL (PLLI2S) input clock
  */
-class pllm5_f {
-public:
-	static constexpr std::size_t Offset = 5;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr pllm5_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Division factor for the main PLL (PLL) and audio PLL (PLLI2S) input clock
- */
-class pllm4_f {
-public:
-	static constexpr std::size_t Offset = 4;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr pllm4_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Division factor for the main PLL (PLL) and audio PLL (PLLI2S) input clock
- */
-class pllm3_f {
-public:
-	static constexpr std::size_t Offset = 3;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr pllm3_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Division factor for the main PLL (PLL) and audio PLL (PLLI2S) input clock
- */
-class pllm2_f {
-public:
-	static constexpr std::size_t Offset = 2;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr pllm2_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Division factor for the main PLL (PLL) and audio PLL (PLLI2S) input clock
- */
-class pllm1_f {
-public:
-	static constexpr std::size_t Offset = 1;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr pllm1_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * Division factor for the main PLL (PLL) and audio PLL (PLLI2S) input clock
- */
-class pllm0_f {
+class pllm_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
+	static constexpr std::size_t Width = 6;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr pllm0_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator pllcfgr_r() const {return m_value ? Mask : 0;}
+	constexpr pllm_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator pllcfgr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
 	constexpr auto operator|(pllcfgr_r other) const -> pllcfgr_r { return static_cast<pllcfgr_r>(*this) | other.m_value;}
 
 private:
-	 bool m_value;
+	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto pllq3() const -> pllq3_f {return pllq3_f((m_value & pllq3_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllq2() const -> pllq2_f {return pllq2_f((m_value & pllq2_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllq1() const -> pllq1_f {return pllq1_f((m_value & pllq1_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllq0() const -> pllq0_f {return pllq0_f((m_value & pllq0_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto pllq() const -> pllq_f {return pllq_f(static_cast<uint8_t>(m_value >> pllq_f::Offset));}
 	[[nodiscard]] constexpr auto pllsrc() const -> pllsrc_f {return pllsrc_f((m_value & pllsrc_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllp1() const -> pllp1_f {return pllp1_f((m_value & pllp1_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllp0() const -> pllp0_f {return pllp0_f((m_value & pllp0_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln8() const -> plln8_f {return plln8_f((m_value & plln8_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln7() const -> plln7_f {return plln7_f((m_value & plln7_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln6() const -> plln6_f {return plln6_f((m_value & plln6_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln5() const -> plln5_f {return plln5_f((m_value & plln5_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln4() const -> plln4_f {return plln4_f((m_value & plln4_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln3() const -> plln3_f {return plln3_f((m_value & plln3_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln2() const -> plln2_f {return plln2_f((m_value & plln2_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln1() const -> plln1_f {return plln1_f((m_value & plln1_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto plln0() const -> plln0_f {return plln0_f((m_value & plln0_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllm5() const -> pllm5_f {return pllm5_f((m_value & pllm5_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllm4() const -> pllm4_f {return pllm4_f((m_value & pllm4_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllm3() const -> pllm3_f {return pllm3_f((m_value & pllm3_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllm2() const -> pllm2_f {return pllm2_f((m_value & pllm2_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllm1() const -> pllm1_f {return pllm1_f((m_value & pllm1_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pllm0() const -> pllm0_f {return pllm0_f((m_value & pllm0_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto pllp() const -> pllp_f {return pllp_f(static_cast<uint8_t>(m_value >> pllp_f::Offset));}
+	[[nodiscard]] constexpr auto plln() const -> plln_f {return plln_f(static_cast<uint16_t>(m_value >> plln_f::Offset));}
+	[[nodiscard]] constexpr auto pllm() const -> pllm_f {return pllm_f(static_cast<uint8_t>(m_value >> pllm_f::Offset));}
 
 	constexpr pllcfgr_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(pllcfgr_r other) const -> pllcfgr_r { return m_value | other.m_value; }
@@ -689,7 +370,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0b100100000000000011000000010000;
+	static constexpr uint32_t ResetValue = 0b100100000000000011000000010000; // 603992080 0x24003010
 
 private:
 	uint32_t m_value;
@@ -873,73 +554,39 @@ private:
 /**
  * System clock switch status
  */
-class sws1_f {
-public:
-	static constexpr std::size_t Offset = 3;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr sws1_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator cfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(cfgr_r other) const -> cfgr_r { return static_cast<cfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * System clock switch status
- */
-class sws0_f {
+class sws_f {
 public:
 	static constexpr std::size_t Offset = 2;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr sws0_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator cfgr_r() const {return m_value ? Mask : 0;}
+	constexpr sws_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator cfgr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
 	constexpr auto operator|(cfgr_r other) const -> cfgr_r { return static_cast<cfgr_r>(*this) | other.m_value;}
 
 private:
-	 bool m_value;
+	 uint8_t m_value;
 };
 
 /**
  * System clock switch
  */
-class sw1_f {
-public:
-	static constexpr std::size_t Offset = 1;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr sw1_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator cfgr_r() const {return m_value ? Mask : 0;}
-	constexpr auto operator|(cfgr_r other) const -> cfgr_r { return static_cast<cfgr_r>(*this) | other.m_value;}
-
-private:
-	 bool m_value;
-};
-
-/**
- * System clock switch
- */
-class sw0_f {
+class sw_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr sw0_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator cfgr_r() const {return m_value ? Mask : 0;}
+	constexpr sw_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator cfgr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
 	constexpr auto operator|(cfgr_r other) const -> cfgr_r { return static_cast<cfgr_r>(*this) | other.m_value;}
 
 private:
-	 bool m_value;
+	 uint8_t m_value;
 };
 
 	[[nodiscard]] constexpr auto mco2() const -> mco2_f {return mco2_f(static_cast<uint8_t>(m_value >> mco2_f::Offset));}
@@ -951,10 +598,8 @@ private:
 	[[nodiscard]] constexpr auto ppre2() const -> ppre2_f {return ppre2_f(static_cast<uint8_t>(m_value >> ppre2_f::Offset));}
 	[[nodiscard]] constexpr auto ppre1() const -> ppre1_f {return ppre1_f(static_cast<uint8_t>(m_value >> ppre1_f::Offset));}
 	[[nodiscard]] constexpr auto hpre() const -> hpre_f {return hpre_f(static_cast<uint8_t>(m_value >> hpre_f::Offset));}
-	[[nodiscard]] constexpr auto sws1() const -> sws1_f {return sws1_f((m_value & sws1_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto sws0() const -> sws0_f {return sws0_f((m_value & sws0_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto sw1() const -> sw1_f {return sw1_f((m_value & sw1_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto sw0() const -> sw0_f {return sw0_f((m_value & sw0_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto sws() const -> sws_f {return sws_f(static_cast<uint8_t>(m_value >> sws_f::Offset));}
+	[[nodiscard]] constexpr auto sw() const -> sw_f {return sw_f(static_cast<uint8_t>(m_value >> sw_f::Offset));}
 
 	constexpr cfgr_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(cfgr_r other) const -> cfgr_r { return m_value | other.m_value; }
@@ -962,7 +607,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1360,7 +1005,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 12;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1549,7 +1194,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 16;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1586,7 +1231,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 20;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1832,7 +1477,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 32;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2040,7 +1685,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 36;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2229,7 +1874,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 48;
-	static constexpr uint32_t ResetValue = 0b100000000000000000000;
+	static constexpr uint32_t ResetValue = 0b100000000000000000000; // 1048576 0x100000
 
 private:
 	uint32_t m_value;
@@ -2266,7 +1911,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 52;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2512,7 +2157,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 64;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2720,7 +2365,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 68;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -2947,7 +2592,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 80;
-	static constexpr uint32_t ResetValue = 0b1111110011001111001000111111111;
+	static constexpr uint32_t ResetValue = 0b1111110011001111001000111111111; // 2120716799 0x7E6791FF
 
 private:
 	uint32_t m_value;
@@ -2984,7 +2629,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 84;
-	static constexpr uint32_t ResetValue = 0b11110001;
+	static constexpr uint32_t ResetValue = 0b11110001; // 241 0xF1
 
 private:
 	uint32_t m_value;
@@ -3230,7 +2875,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 96;
-	static constexpr uint32_t ResetValue = 0b110110111111101100100111111111;
+	static constexpr uint32_t ResetValue = 0b110110111111101100100111111111; // 922667519 0x36FEC9FF
 
 private:
 	uint32_t m_value;
@@ -3438,7 +3083,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 100;
-	static constexpr uint32_t ResetValue = 0b1110101111100110011;
+	static constexpr uint32_t ResetValue = 0b1110101111100110011; // 483123 0x75F33
 
 private:
 	uint32_t m_value;
@@ -3589,7 +3234,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 112;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -3797,7 +3442,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 116;
-	static constexpr uint32_t ResetValue = 0b1110000000000000000000000000;
+	static constexpr uint32_t ResetValue = 0b1110000000000000000000000000; // 234881024 0xE000000
 
 private:
 	uint32_t m_value;
@@ -3893,7 +3538,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 128;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -3951,16 +3596,16 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 132;
-	static constexpr uint32_t ResetValue = 0b100000000000000011000000000000;
+	static constexpr uint32_t ResetValue = 0b100000000000000011000000000000; // 536883200 0x20003000
 
 private:
 	uint32_t m_value;
 };
 
-	ReadOnlyMemory<uint32_t,cr_r> cr;
+	Memory<uint32_t,cr_r> cr;
 	Memory<uint32_t,pllcfgr_r> pllcfgr;
-	ReadOnlyMemory<uint32_t,cfgr_r> cfgr;
-	ReadOnlyMemory<uint32_t,cir_r> cir;
+	Memory<uint32_t,cfgr_r> cfgr;
+	Memory<uint32_t,cir_r> cir;
 	Memory<uint32_t,ahb1rstr_r> ahb1rstr;
 	Memory<uint32_t,ahb2rstr_r> ahb2rstr;
 	Padding<8> _p24;
@@ -3979,8 +3624,8 @@ private:
 	Memory<uint32_t,apb1lpenr_r> apb1lpenr;
 	Memory<uint32_t,apb2lpenr_r> apb2lpenr;
 	Padding<8> _p104;
-	ReadOnlyMemory<uint32_t,bdcr_r> bdcr;
-	ReadOnlyMemory<uint32_t,csr_r> csr;
+	Memory<uint32_t,bdcr_r> bdcr;
+	Memory<uint32_t,csr_r> csr;
 	Padding<8> _p120;
 	Memory<uint32_t,sscgr_r> sscgr;
 	Memory<uint32_t,plli2scfgr_r> plli2scfgr;
@@ -4008,7 +3653,7 @@ static_assert(offsetof(rcc_p, csr) == rcc_p::csr_r::Offset);
 static_assert(offsetof(rcc_p, sscgr) == rcc_p::sscgr_r::Offset);
 static_assert(offsetof(rcc_p, plli2scfgr) == rcc_p::plli2scfgr_r::Offset);
 
+inline rcc_p& rcc = *reinterpret_cast<rcc_p*>(0x40023800);
 
-}; // STM32F401
+} // STM32F401
 
-rcc_p& rcc = *reinterpret_cast<rcc_p*>(0x40023800);

@@ -62,7 +62,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0b1111111;
+	static constexpr uint32_t ResetValue = 0b1111111; // 127 0x7F
 
 private:
 	uint32_t m_value;
@@ -157,7 +157,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0b1111111;
+	static constexpr uint32_t ResetValue = 0b1111111; // 127 0x7F
 
 private:
 	uint32_t m_value;
@@ -194,7 +194,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -210,7 +210,7 @@ static_assert(offsetof(wwdg_p, cr) == wwdg_p::cr_r::Offset);
 static_assert(offsetof(wwdg_p, cfr) == wwdg_p::cfr_r::Offset);
 static_assert(offsetof(wwdg_p, sr) == wwdg_p::sr_r::Offset);
 
+inline wwdg_p& wwdg = *reinterpret_cast<wwdg_p*>(0x40002C00);
 
-}; // STM32F401
+} // STM32F401
 
-wwdg_p& wwdg = *reinterpret_cast<wwdg_p*>(0x40002C00);

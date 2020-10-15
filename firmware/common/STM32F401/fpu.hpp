@@ -194,7 +194,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -232,7 +232,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -517,7 +517,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -571,7 +571,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -583,8 +583,8 @@ private:
 static_assert(std::is_standard_layout_v<fpu_cpacr_p>);
 static_assert(offsetof(fpu_cpacr_p, cpacr) == fpu_cpacr_p::cpacr_r::Offset);
 
-fpu_p& fpu = *reinterpret_cast<fpu_p*>(0xE000EF34);
-fpu_cpacr_p& fpu_cpacr = *reinterpret_cast<fpu_cpacr_p*>(0xE000ED88);
+inline fpu_p& fpu = *reinterpret_cast<fpu_p*>(0xE000EF34);
+inline fpu_cpacr_p& fpu_cpacr = *reinterpret_cast<fpu_cpacr_p*>(0xE000ED88);
 
-}; // STM32F401
+} // STM32F401
 

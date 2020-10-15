@@ -36,13 +36,13 @@ public:
 
     auto operator |=(TReg value) -> Memory&
     {
-        m_value.fetch_and(value.value(), std::memory_order_relaxed);
+        m_value.fetch_or(value.value(), std::memory_order_relaxed);
         return *this;
     }
 
     auto operator &=(TReg value) -> Memory&
     {
-        m_value.fetch_or(value.value(), std::memory_order_relaxed);
+        m_value.fetch_and(value.value(), std::memory_order_relaxed);
         return *this;
     }
 

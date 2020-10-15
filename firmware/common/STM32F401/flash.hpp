@@ -138,7 +138,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -176,7 +176,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -214,7 +214,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -365,7 +365,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 12;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -556,7 +556,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 16;
-	static constexpr uint32_t ResetValue = 0b10000000000000000000000000000000;
+	static constexpr uint32_t ResetValue = 0b10000000000000000000000000000000; // 2147483648 0x80000000
 
 private:
 	uint32_t m_value;
@@ -729,16 +729,16 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 20;
-	static constexpr uint32_t ResetValue = 0b10100;
+	static constexpr uint32_t ResetValue = 0b10100; // 20 0x14
 
 private:
 	uint32_t m_value;
 };
 
-	ReadOnlyMemory<uint32_t,acr_r> acr;
+	Memory<uint32_t,acr_r> acr;
 	WriteOnlyMemory<uint32_t,keyr_r> keyr;
 	WriteOnlyMemory<uint32_t,optkeyr_r> optkeyr;
-	ReadOnlyMemory<uint32_t,sr_r> sr;
+	Memory<uint32_t,sr_r> sr;
 	Memory<uint32_t,cr_r> cr;
 	Memory<uint32_t,optcr_r> optcr;
 };
@@ -751,7 +751,7 @@ static_assert(offsetof(flash_p, sr) == flash_p::sr_r::Offset);
 static_assert(offsetof(flash_p, cr) == flash_p::cr_r::Offset);
 static_assert(offsetof(flash_p, optcr) == flash_p::optcr_r::Offset);
 
+inline flash_p& flash = *reinterpret_cast<flash_p*>(0x40023C00);
 
-}; // STM32F401
+} // STM32F401
 
-flash_p& flash = *reinterpret_cast<flash_p*>(0x40023C00);

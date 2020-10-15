@@ -213,7 +213,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0b110000000000000000000000;
+	static constexpr uint32_t ResetValue = 0b110000000000000000000000; // 12582912 0xC00000
 
 private:
 	uint32_t m_value;
@@ -251,7 +251,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -309,7 +309,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -612,7 +612,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 12;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -803,7 +803,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 16;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1049,7 +1049,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 20;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -1107,13 +1107,13 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 24;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
 };
 
-	ReadOnlyMemory<uint32_t,sr_r> sr;
+	Memory<uint32_t,sr_r> sr;
 	Memory<uint32_t,dr_r> dr;
 	Memory<uint32_t,brr_r> brr;
 	Memory<uint32_t,cr1_r> cr1;
@@ -1131,9 +1131,9 @@ static_assert(offsetof(usart_p, cr2) == usart_p::cr2_r::Offset);
 static_assert(offsetof(usart_p, cr3) == usart_p::cr3_r::Offset);
 static_assert(offsetof(usart_p, gtpr) == usart_p::gtpr_r::Offset);
 
+inline usart_p& usart1 = *reinterpret_cast<usart_p*>(0x40011000);
+inline usart_p& usart2 = *reinterpret_cast<usart_p*>(0x40004400);
+inline usart_p& usart6 = *reinterpret_cast<usart_p*>(0x40011400);
 
-}; // STM32F401
+} // STM32F401
 
-usart_p& usart1 = *reinterpret_cast<usart_p*>(0x40011000);
-usart_p& usart2 = *reinterpret_cast<usart_p*>(0x40004400);
-usart_p& usart6 = *reinterpret_cast<usart_p*>(0x40011400);

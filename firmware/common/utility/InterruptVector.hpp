@@ -24,9 +24,9 @@ public:
 		IsrHandler* usageFault = nullptr,
 		IsrHandler* debugMonitor = nullptr) :
             m_system(
-            		endOfStack, reset, nonMaskableInterrupt, hardFault,
-					memoryManagement, busFault, usageFault, serviceCall,
-					debugMonitor, pendingService, systick)
+            		endOfStack, reset, systick, serviceCall,
+					pendingService, nonMaskableInterrupt, hardFault, memoryManagement,
+					busFault, usageFault, debugMonitor)
 	{
 	}
 

@@ -99,7 +99,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -137,7 +137,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -175,7 +175,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -251,7 +251,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 12;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -269,7 +269,7 @@ static_assert(offsetof(stk_p, load) == stk_p::load_r::Offset);
 static_assert(offsetof(stk_p, val) == stk_p::val_r::Offset);
 static_assert(offsetof(stk_p, calib) == stk_p::calib_r::Offset);
 
+inline stk_p& stk = *reinterpret_cast<stk_p*>(0xE000E010);
 
-}; // STM32F401
+} // STM32F401
 
-stk_p& stk = *reinterpret_cast<stk_p*>(0xE000E010);

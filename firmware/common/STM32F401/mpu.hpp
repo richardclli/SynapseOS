@@ -82,7 +82,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0b100000000000;
+	static constexpr uint32_t ResetValue = 0b100000000000; // 2048 0x800
 
 private:
 	uint32_t m_value;
@@ -157,7 +157,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -195,7 +195,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -272,7 +272,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 12;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -465,7 +465,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 16;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -485,7 +485,7 @@ static_assert(offsetof(mpu_p, mpu_rnr) == mpu_p::mpu_rnr_r::Offset);
 static_assert(offsetof(mpu_p, mpu_rbar) == mpu_p::mpu_rbar_r::Offset);
 static_assert(offsetof(mpu_p, mpu_rasr) == mpu_p::mpu_rasr_r::Offset);
 
+inline mpu_p& mpu = *reinterpret_cast<mpu_p*>(0xE000ED90);
 
-}; // STM32F401
+} // STM32F401
 
-mpu_p& mpu = *reinterpret_cast<mpu_p*>(0xE000ED90);

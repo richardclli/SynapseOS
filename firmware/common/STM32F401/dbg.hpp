@@ -63,7 +63,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0b10000000000000110010000010001;
+	static constexpr uint32_t ResetValue = 0b10000000000000110010000010001; // 268461073 0x10006411
 
 private:
 	uint32_t m_value;
@@ -177,7 +177,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -385,7 +385,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 8;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -479,7 +479,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 12;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -497,7 +497,7 @@ static_assert(offsetof(dbg_p, dbgmcu_cr) == dbg_p::dbgmcu_cr_r::Offset);
 static_assert(offsetof(dbg_p, dbgmcu_apb1_fz) == dbg_p::dbgmcu_apb1_fz_r::Offset);
 static_assert(offsetof(dbg_p, dbgmcu_apb2_fz) == dbg_p::dbgmcu_apb2_fz_r::Offset);
 
+inline dbg_p& dbg = *reinterpret_cast<dbg_p*>(0xE0042000);
 
-}; // STM32F401
+} // STM32F401
 
-dbg_p& dbg = *reinterpret_cast<dbg_p*>(0xE0042000);

@@ -215,7 +215,7 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
@@ -366,21 +366,21 @@ private:
 	[[nodiscard]] constexpr auto value() const { return m_value; }
 
 	static constexpr std::size_t Offset = 4;
-	static constexpr uint32_t ResetValue = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
 
 private:
 	uint32_t m_value;
 };
 
 	Memory<uint32_t,cr_r> cr;
-	ReadOnlyMemory<uint32_t,csr_r> csr;
+	Memory<uint32_t,csr_r> csr;
 };
 
 static_assert(std::is_standard_layout_v<pwr_p>);
 static_assert(offsetof(pwr_p, cr) == pwr_p::cr_r::Offset);
 static_assert(offsetof(pwr_p, csr) == pwr_p::csr_r::Offset);
 
+inline pwr_p& pwr = *reinterpret_cast<pwr_p*>(0x40007000);
 
-}; // STM32F401
+} // STM32F401
 
-pwr_p& pwr = *reinterpret_cast<pwr_p*>(0x40007000);
