@@ -89,5 +89,5 @@ private:
         }
 
     SystemIrq m_system;
-    std::array<IsrHandler*, PeripheralIrqs> m_peripherals;
+    std::array<IsrHandler*, PeripheralIrqs> m_peripherals{{}};
 };
