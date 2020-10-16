@@ -32,14 +32,14 @@ public:
 		auto *p1 = reinterpret_cast<uint8_t*>(allocator.allocate(200));
 		assert(p1 != nullptr);
 		for (auto i = 0U; i < 200; ++i)
-			p1[i] = i;
+			p1[i] = static_cast<uint8_t>(i);
 
 		assert(allocator.runCheck());
 
 		auto *p2 = allocator.allocate<uint8_t>(333);
 		assert(p2 != nullptr);
 		for (auto i = 0U; i < 333; ++i)
-			p2[i] = 2 * i;
+			p2[i] = static_cast<uint8_t>(2 * i);
 
 		assert(allocator.runCheck());
 
@@ -59,7 +59,6 @@ public:
 		assert(allocator.empty());
 	}
 
-
 	static void BufferAllocation()
 	{
 		Allocator<1000, true> allocator;
@@ -67,13 +66,14 @@ public:
 		constexpr std::size_t count = 200;
 
 		{
-			Buffer<uint8_t> buffer{
-				allocator.allocate<uint8_t>(count),
-				count,
-				[&](uint8_t* ptr, std::size_t){allocator.deallocate(ptr);}};
+			maestro::Buffer<uint8_t> buffer
+			{ allocator.allocate<uint8_t>(count), count, [&](uint8_t *ptr, std::size_t)
+			{
+				allocator.deallocate(ptr);
+			} };
 
-			for(auto i = 0U; i<count; ++i)
-				buffer[i] = 10*i;
+			for (auto i = 0U; i < count; ++i)
+				buffer[i] = static_cast<uint8_t>(10 * i);
 
 			assert(allocator.runCheck());
 			assert(!allocator.empty());

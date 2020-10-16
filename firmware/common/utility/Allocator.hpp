@@ -48,7 +48,7 @@ public:
 	}
 
 	template<typename T>
-	T* allocate(std::size_t count = 1)
+	T* allocate(size_type count = 1)
 	{
 		return reinterpret_cast<T*>(allocate(count*sizeof(T)));
 	}
@@ -170,5 +170,4 @@ public:
 private:
 
 	std::array<element_type, Size> m_data;
-
 };

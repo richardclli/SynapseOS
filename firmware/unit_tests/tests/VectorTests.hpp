@@ -5,7 +5,7 @@ class VectorTests
 {
 public:
 
-	static constexpr float PiOverTwo = std::acos(0);
+	static constexpr float PiOverTwo = std::acos(0.f);
 
 	template<std::size_t Size>
 	static void Initialization()
@@ -142,7 +142,7 @@ public:
 		Vector<Size> v;
 
 		for(auto i = 0U; i < Size; ++i)
-			v[i] = i;
+			v[i] = static_cast<float>(i);
 
 		v-=v;
 
@@ -155,7 +155,7 @@ public:
 	{
 		Vector<Size> v;
 		for(auto i = 0U; i < Size; ++i)
-			v[i] = i;
+			v[i] = static_cast<float>(i);
 
 		v.normalize();
 		assert(std::abs(v.length() - 1.f) <= std::numeric_limits<float>::epsilon());
@@ -166,7 +166,7 @@ public:
 	{
 		Vector<Size> v;
 		for(auto i = 0U; i < Size; ++i)
-			v[i] = i;
+			v[i] = static_cast<float>(i);
 
 		auto minus = -v;
 		for(auto i = 0U; i<Size; ++i)

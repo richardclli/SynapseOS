@@ -88,26 +88,28 @@ public:
 	 */
 	void store(const DataType &data, size_type length = sizeof(DataType), size_type index = 0)
 	{
+		constexpr uint8_t maxLength = 0xFE;
+
 		assert(index + length <= EepromSize);
 
 		auto ptr = reinterpret_cast<const uint8_t*>(&data);
 
-		while (length > 0xFE) // too big for chunk size
+		while (length > maxLength) // too big for chunk size
 		{
-			if (!writeChunk(ptr, 0xFE, index))
+			if (!writeChunk(ptr, maxLength, index))
 			{
 				flushTo(data, (readSector() + 1) % SectorCount);
 				return;
 			}
-			ptr += 0xFE;
-			index += 0xFE;
-			length -= 0xFE;
+			ptr += maxLength;
+			index = static_cast<size_type>(index + maxLength);
+			length = static_cast<size_type>(length - maxLength);
 		}
 
 		if (length == 0)
 			return;
 
-		if (!writeChunk(ptr, length, index))
+		if (!writeChunk(ptr, static_cast<uint8_t>(length), static_cast<uint8_t>(index)))
 		{
 			flushTo(data, (readSector() + 1) % SectorCount);
 			return;
@@ -232,7 +234,7 @@ private:
 			if (s == 0xFF)
 				break;
 
-			index += sizeof(size_type) + 1 + s;
+			index = static_cast<size_type>(index + sizeof(size_type) + 1 + s);
 			assert(index + sizeof(size_type) + 2 < SectorSize);
 		}
 

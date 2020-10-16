@@ -5,6 +5,11 @@
 #include "BufferTests.hpp"
 #include "AllocatorTests.hpp"
 #include "EepromSimulationTests.hpp"
+#include "PacketTests.hpp"
+#include "PacketStreamTests.hpp"
+#include "EngineTests.hpp"
+
+#include <Engine.hpp>
 
 extern "C"
 {
@@ -105,6 +110,24 @@ extern "C"
 		EepromSimulationTests::Split();
 	}
 
+	void runPacketTests()
+	{
+		PacketTests::Instanciation();
+		PacketTests::Deleter();
+	}
+
+	void runPacketStreamTests()
+	{
+		PacketStreamTests::AutoFeed();
+		PacketStreamTests::AutoFeed32();
+		PacketStreamTests::AutoFeedEscapeCommand();
+	}
+
+	void runEngineTests()
+	{
+		EngineTests::simpleTest();
+	}
+
 	void runAllTests()
 	{
 		runSlopeTests();
@@ -114,6 +137,9 @@ extern "C"
 		runBufferTests();
 		runAllocatorTests();
 		runEepromSimulationTests();
+		runPacketTests();
+		runPacketStreamTests();
+		runEngineTests();
 	}
 
 }

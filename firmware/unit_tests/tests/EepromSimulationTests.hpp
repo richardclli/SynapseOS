@@ -173,7 +173,7 @@ public:
 			std::array<uint8_t, 300> data;
 
 			for (auto i = 0U; i < data.size(); ++i)
-				data[i] = 3 * i;
+				data[i] =  static_cast<uint8_t>(3*i);
 
 			eeprom.store(data); // save once
 			eeprom.store(data); // trigger a flush

@@ -1,0 +1,199 @@
+#pragma once
+
+#include "Memory.hpp"
+
+namespace STM32F401
+{
+
+/**
+ * Independent watchdog
+ */
+class iwdg_p {
+public:
+/**
+ * Key register
+ */
+class kr_r {
+public:
+
+/**
+ * Key value
+ */
+class key_f {
+public:
+	static constexpr std::size_t Offset = 0;
+	static constexpr std::size_t Width = 16;
+	static constexpr uint16_t Range = static_cast<uint16_t>(0b1111111111111111);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
+
+	constexpr key_f(uint16_t value) : m_value(value) {}
+	constexpr operator uint16_t() const {return m_value;}
+	constexpr operator kr_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
+	constexpr auto operator|(kr_r other) const -> kr_r { return static_cast<kr_r>(*this) | other.m_value;}
+
+private:
+	 uint16_t m_value;
+};
+
+	[[nodiscard]] constexpr auto key() const -> key_f {return key_f(static_cast<uint16_t>(m_value >> key_f::Offset));}
+
+	constexpr kr_r(uint32_t value) : m_value(value) {}
+	constexpr auto operator |(kr_r other) const -> kr_r { return m_value | other.m_value; }
+	constexpr auto operator ~() const -> kr_r { return ~m_value; }
+	[[nodiscard]] constexpr auto value() const { return m_value; }
+
+	static constexpr std::size_t Offset = 0;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
+
+private:
+	uint32_t m_value;
+};
+/**
+ * Prescaler register
+ */
+class pr_r {
+public:
+
+/**
+ * Prescaler divider
+ */
+class pr_f {
+public:
+	static constexpr std::size_t Offset = 0;
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
+
+	constexpr pr_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator pr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr auto operator|(pr_r other) const -> pr_r { return static_cast<pr_r>(*this) | other.m_value;}
+
+private:
+	 uint8_t m_value;
+};
+
+	[[nodiscard]] constexpr auto pr() const -> pr_f {return pr_f(static_cast<uint8_t>(m_value >> pr_f::Offset));}
+
+	constexpr pr_r(uint32_t value) : m_value(value) {}
+	constexpr auto operator |(pr_r other) const -> pr_r { return m_value | other.m_value; }
+	constexpr auto operator ~() const -> pr_r { return ~m_value; }
+	[[nodiscard]] constexpr auto value() const { return m_value; }
+
+	static constexpr std::size_t Offset = 4;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
+
+private:
+	uint32_t m_value;
+};
+/**
+ * Reload register
+ */
+class rlr_r {
+public:
+
+/**
+ * Watchdog counter reload value
+ */
+class rl_f {
+public:
+	static constexpr std::size_t Offset = 0;
+	static constexpr std::size_t Width = 12;
+	static constexpr uint16_t Range = static_cast<uint16_t>(0b111111111111);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
+
+	constexpr rl_f(uint16_t value) : m_value(value & Range) {}
+	constexpr operator uint16_t() const {return m_value;}
+	constexpr operator rlr_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
+	constexpr auto operator|(rlr_r other) const -> rlr_r { return static_cast<rlr_r>(*this) | other.m_value;}
+
+private:
+	 uint16_t m_value;
+};
+
+	[[nodiscard]] constexpr auto rl() const -> rl_f {return rl_f(static_cast<uint16_t>(m_value >> rl_f::Offset));}
+
+	constexpr rlr_r(uint32_t value) : m_value(value) {}
+	constexpr auto operator |(rlr_r other) const -> rlr_r { return m_value | other.m_value; }
+	constexpr auto operator ~() const -> rlr_r { return ~m_value; }
+	[[nodiscard]] constexpr auto value() const { return m_value; }
+
+	static constexpr std::size_t Offset = 8;
+	static constexpr uint32_t ResetValue = 0b111111111111; // 4095 0xFFF
+
+private:
+	uint32_t m_value;
+};
+/**
+ * Status register
+ */
+class sr_r {
+public:
+
+/**
+ * Watchdog counter reload value update
+ */
+class rvu_f {
+public:
+	static constexpr std::size_t Offset = 1;
+	static constexpr std::size_t Width = 1;
+	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
+
+	constexpr rvu_f(bool value = true) : m_value(value) {}
+	constexpr operator bool() const {return m_value;}
+	constexpr operator sr_r() const {return m_value ? Mask : 0;}
+	constexpr auto operator|(sr_r other) const -> sr_r { return static_cast<sr_r>(*this) | other.m_value;}
+
+private:
+	 bool m_value;
+};
+
+/**
+ * Watchdog prescaler value update
+ */
+class pvu_f {
+public:
+	static constexpr std::size_t Offset = 0;
+	static constexpr std::size_t Width = 1;
+	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
+
+	constexpr pvu_f(bool value = true) : m_value(value) {}
+	constexpr operator bool() const {return m_value;}
+	constexpr operator sr_r() const {return m_value ? Mask : 0;}
+	constexpr auto operator|(sr_r other) const -> sr_r { return static_cast<sr_r>(*this) | other.m_value;}
+
+private:
+	 bool m_value;
+};
+
+	[[nodiscard]] constexpr auto rvu() const -> rvu_f {return rvu_f((m_value & rvu_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto pvu() const -> pvu_f {return pvu_f((m_value & pvu_f::Mask) != 0);}
+
+	constexpr sr_r(uint32_t value) : m_value(value) {}
+	constexpr auto operator |(sr_r other) const -> sr_r { return m_value | other.m_value; }
+	constexpr auto operator ~() const -> sr_r { return ~m_value; }
+	[[nodiscard]] constexpr auto value() const { return m_value; }
+
+	static constexpr std::size_t Offset = 12;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
+
+private:
+	uint32_t m_value;
+};
+
+	WriteOnlyMemory<uint32_t,kr_r> kr;
+	Memory<uint32_t,pr_r> pr;
+	Memory<uint32_t,rlr_r> rlr;
+	ReadOnlyMemory<uint32_t,sr_r> sr;
+};
+
+static_assert(std::is_standard_layout_v<iwdg_p>);
+static_assert(offsetof(iwdg_p, kr) == iwdg_p::kr_r::Offset);
+static_assert(offsetof(iwdg_p, pr) == iwdg_p::pr_r::Offset);
+static_assert(offsetof(iwdg_p, rlr) == iwdg_p::rlr_r::Offset);
+static_assert(offsetof(iwdg_p, sr) == iwdg_p::sr_r::Offset);
+
+inline iwdg_p& iwdg = *reinterpret_cast<iwdg_p*>(0x40003000);
+
+} // STM32F401
+
