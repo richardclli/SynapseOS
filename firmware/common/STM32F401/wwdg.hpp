@@ -28,7 +28,9 @@ public:
 	constexpr wdga_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr_r>() const {return ClearSet<cr_r>(Mask, *this);}
 	constexpr auto operator|(cr_r other) const -> cr_r { return static_cast<cr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr_r> other) const -> ClearSet<cr_r> {return ClearSet<cr_r>(cr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -47,7 +49,9 @@ public:
 	constexpr t_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator cr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<cr_r>() const {return ClearSet<cr_r>(Mask, *this);}
 	constexpr auto operator|(cr_r other) const -> cr_r { return static_cast<cr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr_r> other) const -> ClearSet<cr_r> {return ClearSet<cr_r>(cr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -85,7 +89,9 @@ public:
 	constexpr ewi_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cfr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cfr_r>() const {return ClearSet<cfr_r>(Mask, *this);}
 	constexpr auto operator|(cfr_r other) const -> cfr_r { return static_cast<cfr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cfr_r> other) const -> ClearSet<cfr_r> {return ClearSet<cfr_r>(cfr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -103,7 +109,9 @@ public:
 	constexpr wdgtb1_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cfr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cfr_r>() const {return ClearSet<cfr_r>(Mask, *this);}
 	constexpr auto operator|(cfr_r other) const -> cfr_r { return static_cast<cfr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cfr_r> other) const -> ClearSet<cfr_r> {return ClearSet<cfr_r>(cfr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -121,7 +129,9 @@ public:
 	constexpr wdgtb0_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cfr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cfr_r>() const {return ClearSet<cfr_r>(Mask, *this);}
 	constexpr auto operator|(cfr_r other) const -> cfr_r { return static_cast<cfr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cfr_r> other) const -> ClearSet<cfr_r> {return ClearSet<cfr_r>(cfr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -140,7 +150,9 @@ public:
 	constexpr w_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator cfr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<cfr_r>() const {return ClearSet<cfr_r>(Mask, *this);}
 	constexpr auto operator|(cfr_r other) const -> cfr_r { return static_cast<cfr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cfr_r> other) const -> ClearSet<cfr_r> {return ClearSet<cfr_r>(cfr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -180,7 +192,9 @@ public:
 	constexpr ewif_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr_r>() const {return ClearSet<sr_r>(Mask, *this);}
 	constexpr auto operator|(sr_r other) const -> sr_r { return static_cast<sr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr_r> other) const -> ClearSet<sr_r> {return ClearSet<sr_r>(sr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;

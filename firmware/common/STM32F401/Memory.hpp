@@ -4,7 +4,31 @@
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
+#include <tuple>
 #include <type_traits>
+
+/**
+ * Represents both a clear and a set operand for a specific register.
+ */
+template<typename TReg>
+class ClearSet
+{
+public:
+
+	constexpr ClearSet(TReg clear, TReg set) : m_clear(clear), m_set(set) {}
+
+	constexpr auto operator||(ClearSet other) const -> ClearSet
+	{
+		return ClearSet(m_clear | other.m_clear, m_set | other.m_set);
+	}
+
+	constexpr auto clear() const -> TReg {return m_clear;}
+	constexpr auto set() const -> TReg {return m_set;}
+
+private:
+	TReg m_clear;
+	TReg m_set;
+};
 
 /**
  * Helper class for memory registers access.
@@ -49,6 +73,14 @@ public:
     auto operator ^=(TReg value) -> Memory&
     {
         m_value.fetch_xor(value.value(), std::memory_order_relaxed);
+        return *this;
+    }
+
+    auto operator <<=(ClearSet<TReg> value) -> Memory&
+    {
+        auto previous = m_value.load(std::memory_order_relaxed);
+        while(!m_value.compare_exchange_strong(previous, (previous & ~value.clear().value()) | value.set().value(), std::memory_order_relaxed));
+        return *this;
     }
 
 private:

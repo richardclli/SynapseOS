@@ -28,7 +28,9 @@ public:
 	constexpr separate_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_typer_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_typer_r>() const {return ClearSet<mpu_typer_r>(Mask, *this);}
 	constexpr auto operator|(mpu_typer_r other) const -> mpu_typer_r { return static_cast<mpu_typer_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_typer_r> other) const -> ClearSet<mpu_typer_r> {return ClearSet<mpu_typer_r>(mpu_typer_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -47,7 +49,9 @@ public:
 	constexpr dregion_f(uint8_t value) : m_value(value) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator mpu_typer_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_typer_r>() const {return ClearSet<mpu_typer_r>(Mask, *this);}
 	constexpr auto operator|(mpu_typer_r other) const -> mpu_typer_r { return static_cast<mpu_typer_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_typer_r> other) const -> ClearSet<mpu_typer_r> {return ClearSet<mpu_typer_r>(mpu_typer_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -66,7 +70,9 @@ public:
 	constexpr iregion_f(uint8_t value) : m_value(value) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator mpu_typer_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_typer_r>() const {return ClearSet<mpu_typer_r>(Mask, *this);}
 	constexpr auto operator|(mpu_typer_r other) const -> mpu_typer_r { return static_cast<mpu_typer_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_typer_r> other) const -> ClearSet<mpu_typer_r> {return ClearSet<mpu_typer_r>(mpu_typer_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -105,7 +111,9 @@ public:
 	constexpr enable_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_ctrl_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_ctrl_r>() const {return ClearSet<mpu_ctrl_r>(Mask, *this);}
 	constexpr auto operator|(mpu_ctrl_r other) const -> mpu_ctrl_r { return static_cast<mpu_ctrl_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_ctrl_r> other) const -> ClearSet<mpu_ctrl_r> {return ClearSet<mpu_ctrl_r>(mpu_ctrl_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -123,7 +131,9 @@ public:
 	constexpr hfnmiena_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_ctrl_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_ctrl_r>() const {return ClearSet<mpu_ctrl_r>(Mask, *this);}
 	constexpr auto operator|(mpu_ctrl_r other) const -> mpu_ctrl_r { return static_cast<mpu_ctrl_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_ctrl_r> other) const -> ClearSet<mpu_ctrl_r> {return ClearSet<mpu_ctrl_r>(mpu_ctrl_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -141,7 +151,9 @@ public:
 	constexpr privdefena_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_ctrl_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_ctrl_r>() const {return ClearSet<mpu_ctrl_r>(Mask, *this);}
 	constexpr auto operator|(mpu_ctrl_r other) const -> mpu_ctrl_r { return static_cast<mpu_ctrl_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_ctrl_r> other) const -> ClearSet<mpu_ctrl_r> {return ClearSet<mpu_ctrl_r>(mpu_ctrl_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -181,7 +193,9 @@ public:
 	constexpr region_f(uint8_t value) : m_value(value) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator mpu_rnr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_rnr_r>() const {return ClearSet<mpu_rnr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rnr_r other) const -> mpu_rnr_r { return static_cast<mpu_rnr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rnr_r> other) const -> ClearSet<mpu_rnr_r> {return ClearSet<mpu_rnr_r>(mpu_rnr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -219,7 +233,9 @@ public:
 	constexpr region_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator mpu_rbar_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_rbar_r>() const {return ClearSet<mpu_rbar_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rbar_r other) const -> mpu_rbar_r { return static_cast<mpu_rbar_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rbar_r> other) const -> ClearSet<mpu_rbar_r> {return ClearSet<mpu_rbar_r>(mpu_rbar_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -237,7 +253,9 @@ public:
 	constexpr valid_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_rbar_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_rbar_r>() const {return ClearSet<mpu_rbar_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rbar_r other) const -> mpu_rbar_r { return static_cast<mpu_rbar_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rbar_r> other) const -> ClearSet<mpu_rbar_r> {return ClearSet<mpu_rbar_r>(mpu_rbar_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -256,7 +274,9 @@ public:
 	constexpr addr_f(uint32_t value) : m_value(value & Range) {}
 	constexpr operator uint32_t() const {return m_value;}
 	constexpr operator mpu_rbar_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_rbar_r>() const {return ClearSet<mpu_rbar_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rbar_r other) const -> mpu_rbar_r { return static_cast<mpu_rbar_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rbar_r> other) const -> ClearSet<mpu_rbar_r> {return ClearSet<mpu_rbar_r>(mpu_rbar_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint32_t m_value;
@@ -295,7 +315,9 @@ public:
 	constexpr enable_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -314,7 +336,9 @@ public:
 	constexpr size_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -333,7 +357,9 @@ public:
 	constexpr srd_f(uint8_t value) : m_value(value) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -351,7 +377,9 @@ public:
 	constexpr b_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -369,7 +397,9 @@ public:
 	constexpr c_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -387,7 +417,9 @@ public:
 	constexpr s_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -406,7 +438,9 @@ public:
 	constexpr tex_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -425,7 +459,9 @@ public:
 	constexpr ap_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -443,7 +479,9 @@ public:
 	constexpr xn_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator mpu_rasr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<mpu_rasr_r>() const {return ClearSet<mpu_rasr_r>(Mask, *this);}
 	constexpr auto operator|(mpu_rasr_r other) const -> mpu_rasr_r { return static_cast<mpu_rasr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<mpu_rasr_r> other) const -> ClearSet<mpu_rasr_r> {return ClearSet<mpu_rasr_r>(mpu_rasr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;

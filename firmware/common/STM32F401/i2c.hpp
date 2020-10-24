@@ -28,7 +28,9 @@ public:
 	constexpr swrst_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -46,7 +48,9 @@ public:
 	constexpr alert_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -64,7 +68,9 @@ public:
 	constexpr pec_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -82,7 +88,9 @@ public:
 	constexpr pos_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -100,7 +108,9 @@ public:
 	constexpr ack_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -118,7 +128,9 @@ public:
 	constexpr stop_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -136,7 +148,9 @@ public:
 	constexpr start_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -154,7 +168,9 @@ public:
 	constexpr nostretch_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -172,7 +188,9 @@ public:
 	constexpr engc_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -190,7 +208,9 @@ public:
 	constexpr enpec_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -208,7 +228,9 @@ public:
 	constexpr enarp_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -226,7 +248,9 @@ public:
 	constexpr smbtype_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -244,7 +268,9 @@ public:
 	constexpr smbus_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -262,7 +288,9 @@ public:
 	constexpr pe_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr1_r>() const {return ClearSet<cr1_r>(Mask, *this);}
 	constexpr auto operator|(cr1_r other) const -> cr1_r { return static_cast<cr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr1_r> other) const -> ClearSet<cr1_r> {return ClearSet<cr1_r>(cr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -312,7 +340,9 @@ public:
 	constexpr last_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr2_r>() const {return ClearSet<cr2_r>(Mask, *this);}
 	constexpr auto operator|(cr2_r other) const -> cr2_r { return static_cast<cr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr2_r> other) const -> ClearSet<cr2_r> {return ClearSet<cr2_r>(cr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -330,7 +360,9 @@ public:
 	constexpr dmaen_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr2_r>() const {return ClearSet<cr2_r>(Mask, *this);}
 	constexpr auto operator|(cr2_r other) const -> cr2_r { return static_cast<cr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr2_r> other) const -> ClearSet<cr2_r> {return ClearSet<cr2_r>(cr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -348,7 +380,9 @@ public:
 	constexpr itbufen_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr2_r>() const {return ClearSet<cr2_r>(Mask, *this);}
 	constexpr auto operator|(cr2_r other) const -> cr2_r { return static_cast<cr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr2_r> other) const -> ClearSet<cr2_r> {return ClearSet<cr2_r>(cr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -366,7 +400,9 @@ public:
 	constexpr itevten_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr2_r>() const {return ClearSet<cr2_r>(Mask, *this);}
 	constexpr auto operator|(cr2_r other) const -> cr2_r { return static_cast<cr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr2_r> other) const -> ClearSet<cr2_r> {return ClearSet<cr2_r>(cr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -384,7 +420,9 @@ public:
 	constexpr iterren_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator cr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<cr2_r>() const {return ClearSet<cr2_r>(Mask, *this);}
 	constexpr auto operator|(cr2_r other) const -> cr2_r { return static_cast<cr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr2_r> other) const -> ClearSet<cr2_r> {return ClearSet<cr2_r>(cr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -403,7 +441,9 @@ public:
 	constexpr freq_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator cr2_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<cr2_r>() const {return ClearSet<cr2_r>(Mask, *this);}
 	constexpr auto operator|(cr2_r other) const -> cr2_r { return static_cast<cr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<cr2_r> other) const -> ClearSet<cr2_r> {return ClearSet<cr2_r>(cr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -445,7 +485,9 @@ public:
 	constexpr addmode_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator oar1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<oar1_r>() const {return ClearSet<oar1_r>(Mask, *this);}
 	constexpr auto operator|(oar1_r other) const -> oar1_r { return static_cast<oar1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<oar1_r> other) const -> ClearSet<oar1_r> {return ClearSet<oar1_r>(oar1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -464,7 +506,9 @@ public:
 	constexpr add10_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator oar1_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
+	constexpr operator ClearSet<oar1_r>() const {return ClearSet<oar1_r>(Mask, *this);}
 	constexpr auto operator|(oar1_r other) const -> oar1_r { return static_cast<oar1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<oar1_r> other) const -> ClearSet<oar1_r> {return ClearSet<oar1_r>(oar1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -483,7 +527,9 @@ public:
 	constexpr add7_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator oar1_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<oar1_r>() const {return ClearSet<oar1_r>(Mask, *this);}
 	constexpr auto operator|(oar1_r other) const -> oar1_r { return static_cast<oar1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<oar1_r> other) const -> ClearSet<oar1_r> {return ClearSet<oar1_r>(oar1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -501,7 +547,9 @@ public:
 	constexpr add0_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator oar1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<oar1_r>() const {return ClearSet<oar1_r>(Mask, *this);}
 	constexpr auto operator|(oar1_r other) const -> oar1_r { return static_cast<oar1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<oar1_r> other) const -> ClearSet<oar1_r> {return ClearSet<oar1_r>(oar1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -542,7 +590,9 @@ public:
 	constexpr add2_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator oar2_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<oar2_r>() const {return ClearSet<oar2_r>(Mask, *this);}
 	constexpr auto operator|(oar2_r other) const -> oar2_r { return static_cast<oar2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<oar2_r> other) const -> ClearSet<oar2_r> {return ClearSet<oar2_r>(oar2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -560,7 +610,9 @@ public:
 	constexpr endual_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator oar2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<oar2_r>() const {return ClearSet<oar2_r>(Mask, *this);}
 	constexpr auto operator|(oar2_r other) const -> oar2_r { return static_cast<oar2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<oar2_r> other) const -> ClearSet<oar2_r> {return ClearSet<oar2_r>(oar2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -599,7 +651,9 @@ public:
 	constexpr dr_f(uint8_t value) : m_value(value) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator dr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<dr_r>() const {return ClearSet<dr_r>(Mask, *this);}
 	constexpr auto operator|(dr_r other) const -> dr_r { return static_cast<dr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<dr_r> other) const -> ClearSet<dr_r> {return ClearSet<dr_r>(dr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -636,7 +690,9 @@ public:
 	constexpr smbalert_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -654,7 +710,9 @@ public:
 	constexpr timeout_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -672,7 +730,9 @@ public:
 	constexpr pecerr_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -690,7 +750,9 @@ public:
 	constexpr ovr_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -708,7 +770,9 @@ public:
 	constexpr af_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -726,7 +790,9 @@ public:
 	constexpr arlo_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -744,7 +810,9 @@ public:
 	constexpr berr_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -762,7 +830,9 @@ public:
 	constexpr txe_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -780,7 +850,9 @@ public:
 	constexpr rxne_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -798,7 +870,9 @@ public:
 	constexpr stopf_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -816,7 +890,9 @@ public:
 	constexpr add10_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -834,7 +910,9 @@ public:
 	constexpr btf_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -852,7 +930,9 @@ public:
 	constexpr addr_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -870,7 +950,9 @@ public:
 	constexpr sb_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr1_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr1_r>() const {return ClearSet<sr1_r>(Mask, *this);}
 	constexpr auto operator|(sr1_r other) const -> sr1_r { return static_cast<sr1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr1_r> other) const -> ClearSet<sr1_r> {return ClearSet<sr1_r>(sr1_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -921,7 +1003,9 @@ public:
 	constexpr pec_f(uint8_t value) : m_value(value) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator sr2_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
+	constexpr operator ClearSet<sr2_r>() const {return ClearSet<sr2_r>(Mask, *this);}
 	constexpr auto operator|(sr2_r other) const -> sr2_r { return static_cast<sr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr2_r> other) const -> ClearSet<sr2_r> {return ClearSet<sr2_r>(sr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
@@ -939,7 +1023,9 @@ public:
 	constexpr dualf_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr2_r>() const {return ClearSet<sr2_r>(Mask, *this);}
 	constexpr auto operator|(sr2_r other) const -> sr2_r { return static_cast<sr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr2_r> other) const -> ClearSet<sr2_r> {return ClearSet<sr2_r>(sr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -957,7 +1043,9 @@ public:
 	constexpr smbhost_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr2_r>() const {return ClearSet<sr2_r>(Mask, *this);}
 	constexpr auto operator|(sr2_r other) const -> sr2_r { return static_cast<sr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr2_r> other) const -> ClearSet<sr2_r> {return ClearSet<sr2_r>(sr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -975,7 +1063,9 @@ public:
 	constexpr smbdefault_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr2_r>() const {return ClearSet<sr2_r>(Mask, *this);}
 	constexpr auto operator|(sr2_r other) const -> sr2_r { return static_cast<sr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr2_r> other) const -> ClearSet<sr2_r> {return ClearSet<sr2_r>(sr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -993,7 +1083,9 @@ public:
 	constexpr gencall_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr2_r>() const {return ClearSet<sr2_r>(Mask, *this);}
 	constexpr auto operator|(sr2_r other) const -> sr2_r { return static_cast<sr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr2_r> other) const -> ClearSet<sr2_r> {return ClearSet<sr2_r>(sr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -1011,7 +1103,9 @@ public:
 	constexpr tra_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr2_r>() const {return ClearSet<sr2_r>(Mask, *this);}
 	constexpr auto operator|(sr2_r other) const -> sr2_r { return static_cast<sr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr2_r> other) const -> ClearSet<sr2_r> {return ClearSet<sr2_r>(sr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -1029,7 +1123,9 @@ public:
 	constexpr busy_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr2_r>() const {return ClearSet<sr2_r>(Mask, *this);}
 	constexpr auto operator|(sr2_r other) const -> sr2_r { return static_cast<sr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr2_r> other) const -> ClearSet<sr2_r> {return ClearSet<sr2_r>(sr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -1047,7 +1143,9 @@ public:
 	constexpr msl_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator sr2_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<sr2_r>() const {return ClearSet<sr2_r>(Mask, *this);}
 	constexpr auto operator|(sr2_r other) const -> sr2_r { return static_cast<sr2_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<sr2_r> other) const -> ClearSet<sr2_r> {return ClearSet<sr2_r>(sr2_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -1091,7 +1189,9 @@ public:
 	constexpr f_s_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ccr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<ccr_r>() const {return ClearSet<ccr_r>(Mask, *this);}
 	constexpr auto operator|(ccr_r other) const -> ccr_r { return static_cast<ccr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<ccr_r> other) const -> ClearSet<ccr_r> {return ClearSet<ccr_r>(ccr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -1109,7 +1209,9 @@ public:
 	constexpr duty_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ccr_r() const {return m_value ? Mask : 0;}
+	constexpr operator ClearSet<ccr_r>() const {return ClearSet<ccr_r>(Mask, *this);}
 	constexpr auto operator|(ccr_r other) const -> ccr_r { return static_cast<ccr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<ccr_r> other) const -> ClearSet<ccr_r> {return ClearSet<ccr_r>(ccr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 bool m_value;
@@ -1128,7 +1230,9 @@ public:
 	constexpr ccr_f(uint16_t value) : m_value(value & Range) {}
 	constexpr operator uint16_t() const {return m_value;}
 	constexpr operator ccr_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
+	constexpr operator ClearSet<ccr_r>() const {return ClearSet<ccr_r>(Mask, *this);}
 	constexpr auto operator|(ccr_r other) const -> ccr_r { return static_cast<ccr_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<ccr_r> other) const -> ClearSet<ccr_r> {return ClearSet<ccr_r>(ccr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint16_t m_value;
@@ -1168,7 +1272,9 @@ public:
 	constexpr trise_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator trise_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	constexpr operator ClearSet<trise_r>() const {return ClearSet<trise_r>(Mask, *this);}
 	constexpr auto operator|(trise_r other) const -> trise_r { return static_cast<trise_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<trise_r> other) const -> ClearSet<trise_r> {return ClearSet<trise_r>(trise_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
 	 uint8_t m_value;
