@@ -9,9 +9,11 @@
 #include <scb.hpp>
 
 #include <CortexM.hpp>
-#include <drivers/mpuexti.hpp>
 
+#include <drivers/mpuexti.hpp>
 #include <drivers/mpuspi.hpp>
+#include <drivers/leds.hpp>
+#include <drivers/governor.hpp>
 
 #include <mpu9250.hpp>
 
@@ -33,9 +35,26 @@ public:
 		opsy::CortexM::enableFpu();
 		startClock(8, 336, 4, 7);
 
+		neuron::leds::init();
+		neuron::governor::init();
+
 		m_task.start([]()
 		{
 			assert(sensor::selfTest<neuron::mpu_exti>(MpuPriority));
+
+			neuron::leds::set(neuron::leds::mode::separate);
+			neuron::leds::set(neuron::leds::green::off);
+			uint32_t i = 1;
+
+
+			while(true)
+			{
+				neuron::leds::set(i++);
+				if(i == 4)
+					i = 1;
+				opsy::sleep_for(10s);
+			}
+
 			/*auto found = sensor::init(MpuPriority);
 			assert(found);
 			sensor::setGyro(GyroRange::r1000, GyroFilterOdr::lp3600_8k, 0);
