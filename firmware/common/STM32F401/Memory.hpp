@@ -31,6 +31,40 @@ private:
 };
 
 /**
+ * Describes a value to handle atomically
+ */
+template<typename T>
+struct atomic_t
+{
+	T value;
+    constexpr auto operator~() {return atomic_t{~value};}
+};
+
+/**
+ * A flag to tag a register value to handle atomically
+ */
+struct ato_flag_t {};
+constexpr ato_flag_t atomic;
+
+template<typename T>
+constexpr auto operator|(T t, [[maybe_unused]] ato_flag_t ato) 
+{
+    return atomic_t<decltype(t|t)>{t};
+}
+
+template<typename T>
+constexpr auto operator||(ClearSet<T> cs, [[maybe_unused]] ato_flag_t ato)
+{
+    return atomic_t<ClearSet<T>>{cs};
+}
+
+template<typename T>
+constexpr auto operator||(T value, [[maybe_unused]] ato_flag_t ato)
+{
+    return atomic_t<decltype(value||value)>{decltype(value||value){T::Mask, value}};
+}
+
+/**
  * Helper class for memory registers access.
  */
 template<typename TInt, typename TReg>
@@ -58,28 +92,52 @@ public:
         return m_value.load(std::memory_order_relaxed);
     }
 
-    auto operator |=(TReg value) -> Memory&
+    auto operator |=(atomic_t<TReg> value) -> Memory&
     {
-        m_value.fetch_or(value.value(), std::memory_order_relaxed);
+        m_value.fetch_or(value.value.value(), std::memory_order_relaxed);
+        return *this;
+    }
+
+    auto operator |=(TReg value) -> Memory&
+	{
+    	m_value.store(m_value.load(std::memory_order_relaxed) | value.value(), std::memory_order_relaxed);
+    	return *this;
+	}
+
+    auto operator &=(atomic_t<TReg> value) -> Memory&
+    {
+        m_value.fetch_and(value.value.value(), std::memory_order_relaxed);
         return *this;
     }
 
     auto operator &=(TReg value) -> Memory&
     {
-        m_value.fetch_and(value.value(), std::memory_order_relaxed);
+        m_value.store(m_value.load(std::memory_order_relaxed) & value.value(), std::memory_order_relaxed);
+        return *this;
+    }
+
+    auto operator ^=(atomic_t<TReg> value) -> Memory&
+    {
+        m_value.fetch_xor(value.value.value(), std::memory_order_relaxed);
         return *this;
     }
 
     auto operator ^=(TReg value) -> Memory&
     {
-        m_value.fetch_xor(value.value(), std::memory_order_relaxed);
+        m_value.store(m_value.load(std::memory_order_relaxed) ^ value.value(), std::memory_order_relaxed);
         return *this;
     }
 
     auto operator <<=(ClearSet<TReg> value) -> Memory&
     {
+        m_value.store((m_value.load(std::memory_order_relaxed) & ~value.clear().value()) | value.set().value(), std::memory_order_relaxed);
+        return *this;
+    }
+
+    auto operator <<=(atomic_t<ClearSet<TReg>> value) -> Memory&
+    {
         auto previous = m_value.load(std::memory_order_relaxed);
-        while(!m_value.compare_exchange_strong(previous, (previous & ~value.clear().value()) | value.set().value(), std::memory_order_relaxed));
+        while(!m_value.compare_exchange_strong(previous, (previous & ~value.value.clear().value()) | value.value.set().value(), std::memory_order_relaxed));
         return *this;
     }
 

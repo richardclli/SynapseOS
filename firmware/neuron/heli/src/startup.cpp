@@ -35,5 +35,7 @@ extern "C" void reset()
 	asm volatile("bkpt 0"); // put a breakpoint because we are not supposed to arrive here
 }
 
-extern "C" constexpr auto __attribute__((section(".isr_vector"))) vector = InterruptVector<IrqCount>(&_estack, reset, SysTick_Handler, SVC_Handler, PendSV_Handler);
+extern "C" constexpr auto __attribute__((section(".isr_vector"))) vector = InterruptVector<IrqCount>(&_estack, reset, SysTick_Handler, SVC_Handler, PendSV_Handler)
+		.Register<DMA2_Stream0_IRQn>(neuron::mpu_spi::isrHandler)
+		.Register<EXTI0_IRQn>(neuron::mpu_exti::isrHandler);
 

@@ -9,12 +9,20 @@
 #include <scb.hpp>
 
 #include <CortexM.hpp>
+#include <drivers/mpuexti.hpp>
+
+#include <drivers/mpuspi.hpp>
+
+#include <mpu9250.hpp>
 
 #include <opsy.hpp>
 
 using namespace STM32F401;
 using namespace std::chrono_literals;
 
+using sensor = mpu9250<neuron::mpu_spi>;
+
+constexpr opsy::IsrPriority MpuPriority = opsy::IsrPriority(0xFF);
 
 class Bsp
 {
@@ -27,16 +35,18 @@ public:
 
 		m_task.start([]()
 		{
-			rcc.ahb1enr |= rcc_p::ahb1enr_r::gpioaen_f();
-			gpioa.moder |= gpioa_p::moder_r::moder5_f(0b01);
+			assert(sensor::selfTest<neuron::mpu_exti>(MpuPriority));
+			/*auto found = sensor::init(MpuPriority);
+			assert(found);
+			sensor::setGyro(GyroRange::r1000, GyroFilterOdr::lp3600_8k, 0);
+			//sensor::setIntPin(false, false, StatusClear::any_read, true);
 
+			Vector<3> gyro;
 			while(true)
 			{
-				opsy::sleep_for(500ms);
-				gpioa.bsrr = gpioa_p::bsrr_r::br5_f();
-				opsy::sleep_for(500ms);
-				gpioa.bsrr = gpioa_p::bsrr_r::bs5_f();
-			}
+				opsy::sleep_for(10ms);
+				gyro = sensor::getGyro(GyroRange::r1000);
+			}*/
 		});
 	}
 
