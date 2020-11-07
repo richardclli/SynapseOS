@@ -28,7 +28,7 @@ public:
 	static void init(opsy::IsrPriority priority)
 	{
 		rcc.ahb1enr <<= rcc_p::ahb1enr_r::gpioaen_f() || rcc_p::ahb1enr_r::dma2en_f() || atomic; // enable gpioa and dma2
-		rcc.apb2enr <<= rcc_p::apb2enr_r::spi1en_f() || rcc_p::apb2enr_r::syscfgen_f() || atomic; // enable spi1 and syscfg
+		rcc.apb2enr <<= rcc_p::apb2enr_r::spi1en_f() || atomic; // enable spi1 and syscfg
 
 		gpioa.bsrr = gpioa_p::bsrr_r::bs4_f(); // set PA4 (CS)
 		gpioa.pupdr <<= gpioa_p::pupdr_r::pupdr4_f(0b00) || atomic; // disable pull-up and pull-down on PA4 (CS)
