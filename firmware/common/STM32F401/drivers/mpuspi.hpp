@@ -91,7 +91,7 @@ public:
 	{
 		std::clamp(maximum, SystemCoreClock / 2, SystemCoreClock / 256);
 		uint32_t ratio = SystemCoreClock / maximum;
-		uint8_t divider = static_cast<uint8_t>(8 * sizeof(uint32_t) - __builtin_clz(ratio));
+		uint8_t divider = static_cast<uint8_t>(8 * sizeof(uint32_t) - __builtin_clz(ratio - 1));
 		spi1.cr1 <<= spi_p::cr1_r::br_f(divider);
 		return SystemCoreClock / (1 << divider);
 	}

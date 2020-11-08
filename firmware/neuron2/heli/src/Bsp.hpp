@@ -1,19 +1,20 @@
 #pragma once
 
+#include <chrono>
+
 #include <opsy.hpp>
 
 #include <drivers/clock.hpp>
 #include <drivers/leds.hpp>
 #include <drivers/lsmspi.hpp>
+#include <drivers/lisspi.hpp>
+
 #include <lsm6dso32.hpp>
+#include <lis3mdl.hpp>
 
-#include <gpio.hpp>
-#include <rcc.hpp>
-#include <dma.hpp>
-
-#include <chrono>
 
 using lsm = lsm6dso32<neuron2::lsmspi>;
+using lis = lis3mdl<neuron2::lisspi>;
 
 using namespace std::chrono_literals;
 
@@ -31,7 +32,8 @@ public:
 
 		m_task.start([]
 		{
-				auto result = lsm::init(opsy::IsrPriority(0xFF));
+				auto imuok = lsm::init(opsy::IsrPriority(0xFF));
+				auto compassok = lis::init(opsy::IsrPriority(0xFF));
 				asm volatile("bkpt 0");
 		});
 	}

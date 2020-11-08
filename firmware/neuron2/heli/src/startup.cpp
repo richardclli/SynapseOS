@@ -26,7 +26,8 @@ uint32_t SystemCoreClock = 160000000;
 
 extern "C" void Reset_Handler();
 extern "C" constexpr auto __attribute__((section(".isr_vector"))) vector = InterruptVector<IrqCount>(&_estack, Reset_Handler, SysTick_Handler, SVC_Handler, PendSV_Handler)
-		.Register<SPI1_IRQn>(neuron2::lsmspi::isrHandler);
+		.Register<DMA2_CH1_IRQn>(neuron2::lsmspi::isrHandler)
+		.Register<DMA2_CH3_IRQn>(neuron2::lisspi::isrHandler);
 
 extern "C" void Reset_Handler()
 {
