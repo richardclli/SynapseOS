@@ -49,8 +49,8 @@ public:
 	{
 		ValueType accumulator = ValueType();
 		for (auto i = 0U; i < Depth / 2; ++i)
-			accumulator += kCoefficients[i] * (backward(i) - forward(i));
-		return m_samplingFrequency * accumulator;
+			accumulator += (backward(i) - forward(i)) * kCoefficients[i];
+		return accumulator * m_samplingFrequency;
 	}
 
 private:
