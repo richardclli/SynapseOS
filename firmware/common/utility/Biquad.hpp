@@ -64,7 +64,7 @@ public:
 	 */
 	constexpr void feed(const ValueType &value)
 	{
-		auto w = value - m_a[0] * m_delay[0] - m_a[1] * m_delay[1];
+		auto w = value - m_delay[0] * m_a[0] - m_delay[1] * m_a[1];
 		m_delay[2] = m_delay[1];
 		m_delay[1] = m_delay[0];
 		m_delay[0] = w;
@@ -76,7 +76,7 @@ public:
 	 */
 	constexpr ValueType value() const
 	{
-		return m_b[0] * m_delay[0] + m_b[1] * m_delay[1] + m_b[2] * m_delay[2];
+		return m_delay[0] * m_b[0] + m_delay[1] * m_b[1] + m_delay[2] * m_b[2];
 	}
 
 	/**
@@ -125,6 +125,7 @@ private:
 		{
 			switch (type)
 			{
+			default:
 			case FilterType::LowPass:
 				return k * k * norm;
 			case FilterType::HighPass:
@@ -139,6 +140,7 @@ private:
 		{
 			switch (type)
 			{
+			default:
 			case FilterType::LowPass:
 				return two * m_b[0];
 			case FilterType::HighPass:
@@ -153,6 +155,7 @@ private:
 		{
 			switch (type)
 			{
+			default:
 			case FilterType::LowPass:
 			case FilterType::HighPass:
 			case FilterType::Notch:
@@ -166,6 +169,7 @@ private:
 		{
 			switch (type)
 			{
+			default:
 			case FilterType::LowPass:
 			case FilterType::HighPass:
 			case FilterType::BandPass:
@@ -176,6 +180,9 @@ private:
 		}
 		case Coeff::a2:
 			return (one - k / q + k * k) * norm;
+
+		default:
+			return zero;
 		}
 	}
 
