@@ -28,7 +28,8 @@ using namespace std::chrono_literals;
 class Bsp {
 public:
 
-	static void initialize() {
+	static void initialize()
+	{
 		neuron2::clock::startClock(1, 20, 2);
 		neuron2::leds::init();
 

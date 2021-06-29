@@ -63,3 +63,63 @@ enum IRQn_Type
 	FPU_IRQn                     = 81   , /** Floating point interrupt                                           */
 	SPI4_IRQn                    = 84   , /** SPI4 global interrupt                                              */
 };
+
+static constexpr const char* IrqNames[] =
+{
+	"Window WatchDog",                                                      // WWDG_IRQn
+	"PVD through EXTI line detection interrupt",                            // PVD_IRQn
+	"Tamper and TimeStamp interrupts through the EXTI line",                // TAMP_STAMP_IRQn
+	"RTC Wakeup interrupt through the EXTI line",                           // RTC_WKUP_IRQn
+	"FLASH global interrupt",                                               // FLASH_IRQn
+	"RCC global interrupt",                                                 // RCC_IRQn
+	"EXTI Line0 interrupt",                                                 // EXTI0_IRQn
+	"EXTI Line1 interrupt",                                                 // EXTI1_IRQn
+	"EXTI Line2 interrupt",                                                 // EXTI2_IRQn
+	"EXTI Line3 interrupt",                                                 // EXTI3_IRQn
+	"EXTI Line4 interrupt",                                                 // EXTI4_IRQn
+	"DMA1 Stream 0",                                                        // DMA1_Stream0_IRQn
+	"DMA1 Stream 1",                                                        // DMA1_Stream1_IRQn
+	"DMA1 Stream 2",                                                        // DMA1_Stream2_IRQn
+	"DMA1 Stream 3",                                                        // DMA1_Stream3_IRQn
+	"DMA1 Stream 4",                                                        // DMA1_Stream4_IRQn
+	"DMA1 Stream 5",                                                        // DMA1_Stream5_IRQn
+	"DMA1 Stream 6",                                                        // DMA1_Stream6_IRQn
+	"ADC1 global interrupt",                                                // ADC_IRQn
+	"EXTI Line[9:5] interrupts",                                            // EXTI9_5_IRQn
+	"TIM1 Break interrupt and TIM9 global interrupt",                       // TIM1_BRK_TIM9_IRQn
+	"TIM1 Update interrupt and TIM10 global interrupt",                     // TIM1_UP_TIM10_IRQn
+	"TIM1 Trigger and Commutation interrupts and TIM11 global interrupt",   // TIM1_TRG_COM_TIM11_IRQn
+	"TIM1 Capture Compare interrupt",                                       // TIM1_CC_IRQn
+	"TIM2 global interrupt",                                                // TIM2_IRQn
+	"TIM3 global interrupt",                                                // TIM3_IRQn
+	"TIM4",                                                                 // TIM4_IRQn
+	"I2C1 event interrupt",                                                 // I2C1_EV_IRQn
+	"I2C1 error interrupt",                                                 // I2C1_ER_IRQn
+	"I2C2 event interrupt",                                                 // I2C2_EV_IRQn
+	"I2C2 error interrupt",                                                 // I2C2_ER_IRQn
+	"SPI1 global interrupt",                                                // SPI1_IRQn
+	"SPI2 global interrupt",                                                // SPI2_IRQn
+	"USART1",                                                               // USART1_IRQn
+	"USART2",                                                               // USART2_IRQn
+	"EXTI Line[15:10] interrupts",                                          // EXTI15_10_IRQn
+	"RTC Alarms (A and B) through EXTI line interrupt",                     // RTC_Alarm_IRQn
+	"USB On-The-Go FS Wakeup through EXTI line interrupt",                  // OTG_FS_WKUP_IRQn
+	"DMA1 Stream 7",                                                        // DMA1_Stream7_IRQn
+	"SDIO global interrupt",                                                // SDIO_IRQn
+	"TIM5",                                                                 // TIM5_IRQn
+	"SPI3 global interrupt",                                                // SPI3_IRQn
+	"DMA2 Stream 0",                                                        // DMA2_Stream0_IRQn
+	"DMA2 Stream 1",                                                        // DMA2_Stream1_IRQn
+	"DMA2 Stream 2",                                                        // DMA2_Stream2_IRQn
+	"DMA2 Stream 3",                                                        // DMA2_Stream3_IRQn
+	"DMA2 Stream 4",                                                        // DMA2_Stream4_IRQn
+	"USB On The Go FS global interrupt",                                    // OTG_FS_IRQn
+	"DMA2 Stream 5",                                                        // DMA2_Stream5_IRQn
+	"DMA2 Stream 6",                                                        // DMA2_Stream6_IRQn
+	"DMA2 Stream 7",                                                        // DMA2_Stream7_IRQn
+	"USART6",                                                               // USART6_IRQn
+	"I2C3 event interrupt",                                                 // I2C3_EV_IRQn
+	"I2C3 error interrupt",                                                 // I2C3_ER_IRQn
+	"Floating point interrupt",                                             // FPU_IRQn
+	"SPI4 global interrupt",                                                // SPI4_IRQn
+};

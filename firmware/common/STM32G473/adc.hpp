@@ -800,16 +800,16 @@ private:
 };
 
 /**
- * AWDCH1CH
+ * Analog watchdog 1 channel selection
  */
-class awdch1ch_f {
+class awd1ch_f {
 public:
 	static constexpr std::size_t Offset = 26;
 	static constexpr std::size_t Width = 5;
 	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
 	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
 
-	constexpr awdch1ch_f(uint8_t value) : m_value(value & Range) {}
+	constexpr awd1ch_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator cfgr_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
 	static constexpr auto get(cfgr_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
@@ -1097,13 +1097,13 @@ private:
 };
 
 /**
- * EXTSEL
+ * External trigger selection for regular group
  */
 class extsel_f {
 public:
-	static constexpr std::size_t Offset = 6;
-	static constexpr std::size_t Width = 4;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111);
+	static constexpr std::size_t Offset = 5;
+	static constexpr std::size_t Width = 5;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
 	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
 
 	constexpr extsel_f(uint8_t value) : m_value(value & Range) {}
@@ -1116,27 +1116,6 @@ public:
 
 private:
 	 uint8_t m_value;
-};
-
-/**
- * ALIGN_5
- */
-class align_5_f {
-public:
-	static constexpr std::size_t Offset = 5;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr align_5_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator cfgr_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(cfgr_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<cfgr_r>() const {return ClearSet<cfgr_r>(Mask, *this);}
-	constexpr auto operator|(cfgr_r other) const -> cfgr_r { return static_cast<cfgr_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<cfgr_r> other) const -> ClearSet<cfgr_r> {return ClearSet<cfgr_r>(cfgr_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
 };
 
 /**
@@ -1204,7 +1183,7 @@ private:
 };
 
 	[[nodiscard]] constexpr auto jqdis() const -> jqdis_f {return jqdis_f((m_value & jqdis_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto awdch1ch() const -> awdch1ch_f {return awdch1ch_f(static_cast<uint8_t>(m_value >> awdch1ch_f::Offset));}
+	[[nodiscard]] constexpr auto awd1ch() const -> awd1ch_f {return awd1ch_f(static_cast<uint8_t>(m_value >> awd1ch_f::Offset));}
 	[[nodiscard]] constexpr auto jauto() const -> jauto_f {return jauto_f((m_value & jauto_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto jawd1en() const -> jawd1en_f {return jawd1en_f((m_value & jawd1en_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto awd1en() const -> awd1en_f {return awd1en_f((m_value & awd1en_f::Mask) != 0);}
@@ -1219,7 +1198,6 @@ private:
 	[[nodiscard]] constexpr auto ovrmod() const -> ovrmod_f {return ovrmod_f((m_value & ovrmod_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto exten() const -> exten_f {return exten_f(static_cast<uint8_t>(m_value >> exten_f::Offset));}
 	[[nodiscard]] constexpr auto extsel() const -> extsel_f {return extsel_f(static_cast<uint8_t>(m_value >> extsel_f::Offset));}
-	[[nodiscard]] constexpr auto align_5() const -> align_5_f {return align_5_f((m_value & align_5_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto res() const -> res_f {return res_f(static_cast<uint8_t>(m_value >> res_f::Offset));}
 	[[nodiscard]] constexpr auto dmacfg() const -> dmacfg_f {return dmacfg_f((m_value & dmacfg_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto dmaen() const -> dmaen_f {return dmaen_f((m_value & dmaen_f::Mask) != 0);}

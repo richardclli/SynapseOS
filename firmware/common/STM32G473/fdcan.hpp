@@ -161,7 +161,7 @@ private:
 	[[nodiscard]] constexpr auto value() const -> uint32_t { return m_value; }
 
 	static constexpr std::size_t Offset = 0;
-	static constexpr uint32_t ResetValue = 0b10001000100010001000100010001; // 286331153 0x11111111
+	static constexpr uint32_t ResetValue = 0b110010000101000001001000011000; // 840176152 0x32141218
 
 private:
 	uint32_t m_value;
@@ -825,16 +825,16 @@ class nbtp_r {
 public:
 
 /**
- * TSEG2
+ * NTSEG2
  */
-class tseg2_f {
+class ntseg2_f {
 public:
 	static constexpr std::size_t Offset = 0;
 	static constexpr std::size_t Width = 7;
 	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111111);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr tseg2_f(uint8_t value) : m_value(value & Range) {}
+	constexpr ntseg2_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator nbtp_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
 	static constexpr auto get(nbtp_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
@@ -912,10 +912,14 @@ private:
 	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto tseg2() const -> tseg2_f {return tseg2_f(static_cast<uint8_t>(m_value >> tseg2_f::Offset));}
+	[[nodiscard]] constexpr auto ntseg2() const -> ntseg2_f {return ntseg2_f(static_cast<uint8_t>(m_value >> ntseg2_f::Offset));}
 	[[nodiscard]] constexpr auto ntseg1() const -> ntseg1_f {return ntseg1_f(static_cast<uint8_t>(m_value >> ntseg1_f::Offset));}
 	[[nodiscard]] constexpr auto nbrp() const -> nbrp_f {return nbrp_f(static_cast<uint16_t>(m_value >> nbrp_f::Offset));}
 	[[nodiscard]] constexpr auto nsjw() const -> nsjw_f {return nsjw_f(static_cast<uint8_t>(m_value >> nsjw_f::Offset));}
+
+	template<std::size_t Index> struct ntseg_f { static_assert(Index == 2 || Index == 1); };
+	template<std::size_t Index> using ntseg_v = typename ntseg_f<Index>::type;
+	template<std::size_t Index> constexpr auto ntseg() const { return ntseg_v<Index>::get(*this); }
 
 	constexpr nbtp_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(nbtp_r other) const -> nbtp_r { return m_value | other.m_value; }
@@ -923,7 +927,7 @@ private:
 	[[nodiscard]] constexpr auto value() const -> uint32_t { return m_value; }
 
 	static constexpr std::size_t Offset = 28;
-	static constexpr uint32_t ResetValue = 0b101000110011; // 2611 0xA33
+	static constexpr uint32_t ResetValue = 0b110000000000000101000000011; // 100665859 0x6000A03
 
 private:
 	uint32_t m_value;
@@ -1191,14 +1195,14 @@ private:
 /**
  * TREC
  */
-class trec_f {
+class rec_f {
 public:
 	static constexpr std::size_t Offset = 8;
 	static constexpr std::size_t Width = 7;
 	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111111);
 	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
 
-	constexpr trec_f(uint8_t value) : m_value(value & Range) {}
+	constexpr rec_f(uint8_t value) : m_value(value & Range) {}
 	constexpr operator uint8_t() const {return m_value;}
 	constexpr operator ecr_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
 	static constexpr auto get(ecr_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
@@ -1254,7 +1258,7 @@ private:
 };
 
 	[[nodiscard]] constexpr auto tec() const -> tec_f {return tec_f(static_cast<uint8_t>(m_value >> tec_f::Offset));}
-	[[nodiscard]] constexpr auto trec() const -> trec_f {return trec_f(static_cast<uint8_t>(m_value >> trec_f::Offset));}
+	[[nodiscard]] constexpr auto rec() const -> rec_f {return rec_f(static_cast<uint8_t>(m_value >> rec_f::Offset));}
 	[[nodiscard]] constexpr auto rp() const -> rp_f {return rp_f((m_value & rp_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto cel() const -> cel_f {return cel_f(static_cast<uint8_t>(m_value >> cel_f::Offset));}
 
@@ -1625,32 +1629,11 @@ private:
 };
 
 /**
- * RF0W
- */
-class rf0w_f {
-public:
-	static constexpr std::size_t Offset = 1;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr rf0w_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ir_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ir_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ir_r>() const {return ClearSet<ir_r>(Mask, *this);}
-	constexpr auto operator|(ir_r other) const -> ir_r { return static_cast<ir_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ir_r> other) const -> ClearSet<ir_r> {return ClearSet<ir_r>(ir_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
  * RF0F
  */
 class rf0f_f {
 public:
-	static constexpr std::size_t Offset = 2;
+	static constexpr std::size_t Offset = 1;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -1671,7 +1654,7 @@ private:
  */
 class rf0l_f {
 public:
-	static constexpr std::size_t Offset = 3;
+	static constexpr std::size_t Offset = 2;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -1692,7 +1675,7 @@ private:
  */
 class rf1n_f {
 public:
-	static constexpr std::size_t Offset = 4;
+	static constexpr std::size_t Offset = 3;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -1709,32 +1692,11 @@ private:
 };
 
 /**
- * RF1W
- */
-class rf1w_f {
-public:
-	static constexpr std::size_t Offset = 5;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr rf1w_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ir_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ir_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ir_r>() const {return ClearSet<ir_r>(Mask, *this);}
-	constexpr auto operator|(ir_r other) const -> ir_r { return static_cast<ir_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ir_r> other) const -> ClearSet<ir_r> {return ClearSet<ir_r>(ir_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
  * RF1F
  */
 class rf1f_f {
 public:
-	static constexpr std::size_t Offset = 6;
+	static constexpr std::size_t Offset = 4;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -1755,7 +1717,7 @@ private:
  */
 class rf1l_f {
 public:
-	static constexpr std::size_t Offset = 7;
+	static constexpr std::size_t Offset = 5;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -1776,9 +1738,9 @@ private:
  */
 class hpm_f {
 public:
-	static constexpr std::size_t Offset = 8;
+	static constexpr std::size_t Offset = 6;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
 	constexpr hpm_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
@@ -1797,9 +1759,9 @@ private:
  */
 class tc_f {
 public:
-	static constexpr std::size_t Offset = 9;
+	static constexpr std::size_t Offset = 7;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
 	constexpr tc_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
@@ -1818,7 +1780,7 @@ private:
  */
 class tcf_f {
 public:
-	static constexpr std::size_t Offset = 10;
+	static constexpr std::size_t Offset = 8;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -1839,7 +1801,7 @@ private:
  */
 class tfe_f {
 public:
-	static constexpr std::size_t Offset = 11;
+	static constexpr std::size_t Offset = 9;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -1860,7 +1822,7 @@ private:
  */
 class tefn_f {
 public:
-	static constexpr std::size_t Offset = 12;
+	static constexpr std::size_t Offset = 10;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -1877,32 +1839,11 @@ private:
 };
 
 /**
- * TEFW
- */
-class tefw_f {
-public:
-	static constexpr std::size_t Offset = 13;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr tefw_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ir_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ir_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ir_r>() const {return ClearSet<ir_r>(Mask, *this);}
-	constexpr auto operator|(ir_r other) const -> ir_r { return static_cast<ir_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ir_r> other) const -> ClearSet<ir_r> {return ClearSet<ir_r>(ir_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
  * TEFF
  */
 class teff_f {
 public:
-	static constexpr std::size_t Offset = 14;
+	static constexpr std::size_t Offset = 11;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -1923,7 +1864,7 @@ private:
  */
 class tefl_f {
 public:
-	static constexpr std::size_t Offset = 15;
+	static constexpr std::size_t Offset = 12;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -1944,9 +1885,9 @@ private:
  */
 class tsw_f {
 public:
-	static constexpr std::size_t Offset = 16;
+	static constexpr std::size_t Offset = 13;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
 	constexpr tsw_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
@@ -1965,9 +1906,9 @@ private:
  */
 class mraf_f {
 public:
-	static constexpr std::size_t Offset = 17;
+	static constexpr std::size_t Offset = 14;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
 	constexpr mraf_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
@@ -1986,32 +1927,11 @@ private:
  */
 class too_f {
 public:
-	static constexpr std::size_t Offset = 18;
+	static constexpr std::size_t Offset = 15;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
 	constexpr too_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ir_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ir_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ir_r>() const {return ClearSet<ir_r>(Mask, *this);}
-	constexpr auto operator|(ir_r other) const -> ir_r { return static_cast<ir_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ir_r> other) const -> ClearSet<ir_r> {return ClearSet<ir_r>(ir_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * DRX
- */
-class drx_f {
-public:
-	static constexpr std::size_t Offset = 19;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr drx_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ir_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ir_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -2028,7 +1948,7 @@ private:
  */
 class elo_f {
 public:
-	static constexpr std::size_t Offset = 22;
+	static constexpr std::size_t Offset = 16;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2049,7 +1969,7 @@ private:
  */
 class ep_f {
 public:
-	static constexpr std::size_t Offset = 23;
+	static constexpr std::size_t Offset = 17;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2070,7 +1990,7 @@ private:
  */
 class ew_f {
 public:
-	static constexpr std::size_t Offset = 24;
+	static constexpr std::size_t Offset = 18;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2091,7 +2011,7 @@ private:
  */
 class bo_f {
 public:
-	static constexpr std::size_t Offset = 25;
+	static constexpr std::size_t Offset = 19;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2112,7 +2032,7 @@ private:
  */
 class wdi_f {
 public:
-	static constexpr std::size_t Offset = 26;
+	static constexpr std::size_t Offset = 20;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2133,7 +2053,7 @@ private:
  */
 class pea_f {
 public:
-	static constexpr std::size_t Offset = 27;
+	static constexpr std::size_t Offset = 21;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2154,7 +2074,7 @@ private:
  */
 class ped_f {
 public:
-	static constexpr std::size_t Offset = 28;
+	static constexpr std::size_t Offset = 22;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2175,7 +2095,7 @@ private:
  */
 class ara_f {
 public:
-	static constexpr std::size_t Offset = 29;
+	static constexpr std::size_t Offset = 23;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2192,11 +2112,9 @@ private:
 };
 
 	[[nodiscard]] constexpr auto rf0n() const -> rf0n_f {return rf0n_f((m_value & rf0n_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf0w() const -> rf0w_f {return rf0w_f((m_value & rf0w_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf0f() const -> rf0f_f {return rf0f_f((m_value & rf0f_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf0l() const -> rf0l_f {return rf0l_f((m_value & rf0l_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf1n() const -> rf1n_f {return rf1n_f((m_value & rf1n_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf1w() const -> rf1w_f {return rf1w_f((m_value & rf1w_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf1f() const -> rf1f_f {return rf1f_f((m_value & rf1f_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf1l() const -> rf1l_f {return rf1l_f((m_value & rf1l_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto hpm() const -> hpm_f {return hpm_f((m_value & hpm_f::Mask) != 0);}
@@ -2204,13 +2122,11 @@ private:
 	[[nodiscard]] constexpr auto tcf() const -> tcf_f {return tcf_f((m_value & tcf_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tfe() const -> tfe_f {return tfe_f((m_value & tfe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tefn() const -> tefn_f {return tefn_f((m_value & tefn_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tefw() const -> tefw_f {return tefw_f((m_value & tefw_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto teff() const -> teff_f {return teff_f((m_value & teff_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tefl() const -> tefl_f {return tefl_f((m_value & tefl_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tsw() const -> tsw_f {return tsw_f((m_value & tsw_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto mraf() const -> mraf_f {return mraf_f((m_value & mraf_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto too() const -> too_f {return too_f((m_value & too_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto drx() const -> drx_f {return drx_f((m_value & drx_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto elo() const -> elo_f {return elo_f((m_value & elo_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto ep() const -> ep_f {return ep_f((m_value & ep_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto ew() const -> ew_f {return ew_f((m_value & ew_f::Mask) != 0);}
@@ -2259,32 +2175,11 @@ private:
 };
 
 /**
- * RF0WE
- */
-class rf0we_f {
-public:
-	static constexpr std::size_t Offset = 1;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr rf0we_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ie_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ie_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ie_r>() const {return ClearSet<ie_r>(Mask, *this);}
-	constexpr auto operator|(ie_r other) const -> ie_r { return static_cast<ie_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ie_r> other) const -> ClearSet<ie_r> {return ClearSet<ie_r>(ie_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
  * RF0FE
  */
 class rf0fe_f {
 public:
-	static constexpr std::size_t Offset = 2;
+	static constexpr std::size_t Offset = 1;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -2305,7 +2200,7 @@ private:
  */
 class rf0le_f {
 public:
-	static constexpr std::size_t Offset = 3;
+	static constexpr std::size_t Offset = 2;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -2326,7 +2221,7 @@ private:
  */
 class rf1ne_f {
 public:
-	static constexpr std::size_t Offset = 4;
+	static constexpr std::size_t Offset = 3;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -2343,32 +2238,11 @@ private:
 };
 
 /**
- * RF1WE
- */
-class rf1we_f {
-public:
-	static constexpr std::size_t Offset = 5;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr rf1we_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ie_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ie_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ie_r>() const {return ClearSet<ie_r>(Mask, *this);}
-	constexpr auto operator|(ie_r other) const -> ie_r { return static_cast<ie_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ie_r> other) const -> ClearSet<ie_r> {return ClearSet<ie_r>(ie_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
  * RF1FE
  */
 class rf1fe_f {
 public:
-	static constexpr std::size_t Offset = 6;
+	static constexpr std::size_t Offset = 4;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -2389,7 +2263,7 @@ private:
  */
 class rf1le_f {
 public:
-	static constexpr std::size_t Offset = 7;
+	static constexpr std::size_t Offset = 5;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
@@ -2410,9 +2284,9 @@ private:
  */
 class hpme_f {
 public:
-	static constexpr std::size_t Offset = 8;
+	static constexpr std::size_t Offset = 6;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
 	constexpr hpme_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
@@ -2431,9 +2305,9 @@ private:
  */
 class tce_f {
 public:
-	static constexpr std::size_t Offset = 9;
+	static constexpr std::size_t Offset = 7;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
 	constexpr tce_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
@@ -2452,7 +2326,7 @@ private:
  */
 class tcfe_f {
 public:
-	static constexpr std::size_t Offset = 10;
+	static constexpr std::size_t Offset = 8;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -2473,7 +2347,7 @@ private:
  */
 class tfee_f {
 public:
-	static constexpr std::size_t Offset = 11;
+	static constexpr std::size_t Offset = 9;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -2494,7 +2368,7 @@ private:
  */
 class tefne_f {
 public:
-	static constexpr std::size_t Offset = 12;
+	static constexpr std::size_t Offset = 10;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -2511,32 +2385,11 @@ private:
 };
 
 /**
- * TEFWE
- */
-class tefwe_f {
-public:
-	static constexpr std::size_t Offset = 13;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr tefwe_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ie_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ie_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ie_r>() const {return ClearSet<ie_r>(Mask, *this);}
-	constexpr auto operator|(ie_r other) const -> ie_r { return static_cast<ie_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ie_r> other) const -> ClearSet<ie_r> {return ClearSet<ie_r>(ie_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
  * TEFFE
  */
 class teffe_f {
 public:
-	static constexpr std::size_t Offset = 14;
+	static constexpr std::size_t Offset = 11;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -2557,7 +2410,7 @@ private:
  */
 class tefle_f {
 public:
-	static constexpr std::size_t Offset = 15;
+	static constexpr std::size_t Offset = 12;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
@@ -2578,9 +2431,9 @@ private:
  */
 class tswe_f {
 public:
-	static constexpr std::size_t Offset = 16;
+	static constexpr std::size_t Offset = 13;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
 	constexpr tswe_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
@@ -2599,9 +2452,9 @@ private:
  */
 class mrafe_f {
 public:
-	static constexpr std::size_t Offset = 17;
+	static constexpr std::size_t Offset = 14;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
 	constexpr mrafe_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
@@ -2620,74 +2473,11 @@ private:
  */
 class tooe_f {
 public:
-	static constexpr std::size_t Offset = 18;
+	static constexpr std::size_t Offset = 15;
 	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
 
 	constexpr tooe_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ie_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ie_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ie_r>() const {return ClearSet<ie_r>(Mask, *this);}
-	constexpr auto operator|(ie_r other) const -> ie_r { return static_cast<ie_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ie_r> other) const -> ClearSet<ie_r> {return ClearSet<ie_r>(ie_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * DRX
- */
-class drx_f {
-public:
-	static constexpr std::size_t Offset = 19;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr drx_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ie_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ie_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ie_r>() const {return ClearSet<ie_r>(Mask, *this);}
-	constexpr auto operator|(ie_r other) const -> ie_r { return static_cast<ie_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ie_r> other) const -> ClearSet<ie_r> {return ClearSet<ie_r>(ie_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * BECE
- */
-class bece_f {
-public:
-	static constexpr std::size_t Offset = 20;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr bece_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ie_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ie_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ie_r>() const {return ClearSet<ie_r>(Mask, *this);}
-	constexpr auto operator|(ie_r other) const -> ie_r { return static_cast<ie_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ie_r> other) const -> ClearSet<ie_r> {return ClearSet<ie_r>(ie_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * BEUE
- */
-class beue_f {
-public:
-	static constexpr std::size_t Offset = 21;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr beue_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ie_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ie_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -2704,7 +2494,7 @@ private:
  */
 class eloe_f {
 public:
-	static constexpr std::size_t Offset = 22;
+	static constexpr std::size_t Offset = 16;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2725,7 +2515,7 @@ private:
  */
 class epe_f {
 public:
-	static constexpr std::size_t Offset = 23;
+	static constexpr std::size_t Offset = 17;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2746,7 +2536,7 @@ private:
  */
 class ewe_f {
 public:
-	static constexpr std::size_t Offset = 24;
+	static constexpr std::size_t Offset = 18;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2767,7 +2557,7 @@ private:
  */
 class boe_f {
 public:
-	static constexpr std::size_t Offset = 25;
+	static constexpr std::size_t Offset = 19;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2788,7 +2578,7 @@ private:
  */
 class wdie_f {
 public:
-	static constexpr std::size_t Offset = 26;
+	static constexpr std::size_t Offset = 20;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2809,7 +2599,7 @@ private:
  */
 class peae_f {
 public:
-	static constexpr std::size_t Offset = 27;
+	static constexpr std::size_t Offset = 21;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2830,7 +2620,7 @@ private:
  */
 class pede_f {
 public:
-	static constexpr std::size_t Offset = 28;
+	static constexpr std::size_t Offset = 22;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2851,7 +2641,7 @@ private:
  */
 class arae_f {
 public:
-	static constexpr std::size_t Offset = 29;
+	static constexpr std::size_t Offset = 23;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -2868,11 +2658,9 @@ private:
 };
 
 	[[nodiscard]] constexpr auto rf0ne() const -> rf0ne_f {return rf0ne_f((m_value & rf0ne_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf0we() const -> rf0we_f {return rf0we_f((m_value & rf0we_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf0fe() const -> rf0fe_f {return rf0fe_f((m_value & rf0fe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf0le() const -> rf0le_f {return rf0le_f((m_value & rf0le_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf1ne() const -> rf1ne_f {return rf1ne_f((m_value & rf1ne_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf1we() const -> rf1we_f {return rf1we_f((m_value & rf1we_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf1fe() const -> rf1fe_f {return rf1fe_f((m_value & rf1fe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf1le() const -> rf1le_f {return rf1le_f((m_value & rf1le_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto hpme() const -> hpme_f {return hpme_f((m_value & hpme_f::Mask) != 0);}
@@ -2880,15 +2668,11 @@ private:
 	[[nodiscard]] constexpr auto tcfe() const -> tcfe_f {return tcfe_f((m_value & tcfe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tfee() const -> tfee_f {return tfee_f((m_value & tfee_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tefne() const -> tefne_f {return tefne_f((m_value & tefne_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tefwe() const -> tefwe_f {return tefwe_f((m_value & tefwe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto teffe() const -> teffe_f {return teffe_f((m_value & teffe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tefle() const -> tefle_f {return tefle_f((m_value & tefle_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tswe() const -> tswe_f {return tswe_f((m_value & tswe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto mrafe() const -> mrafe_f {return mrafe_f((m_value & mrafe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto tooe() const -> tooe_f {return tooe_f((m_value & tooe_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto drx() const -> drx_f {return drx_f((m_value & drx_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto bece() const -> bece_f {return bece_f((m_value & bece_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto beue() const -> beue_f {return beue_f((m_value & beue_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto eloe() const -> eloe_f {return eloe_f((m_value & eloe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto epe() const -> epe_f {return epe_f((m_value & epe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto ewe() const -> ewe_f {return ewe_f((m_value & ewe_f::Mask) != 0);}
@@ -2916,15 +2700,15 @@ class ils_r {
 public:
 
 /**
- * RF0NL
+ * RxFIFO0
  */
-class rf0nl_f {
+class rxfifo0_f {
 public:
 	static constexpr std::size_t Offset = 0;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
-	constexpr rf0nl_f(bool value = true) : m_value(value) {}
+	constexpr rxfifo0_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ils_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -2937,15 +2721,15 @@ private:
 };
 
 /**
- * RF0WL
+ * RxFIFO1
  */
-class rf0wl_f {
+class rxfifo1_f {
 public:
 	static constexpr std::size_t Offset = 1;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
-	constexpr rf0wl_f(bool value = true) : m_value(value) {}
+	constexpr rxfifo1_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ils_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -2958,15 +2742,15 @@ private:
 };
 
 /**
- * RF0FL
+ * SMSG
  */
-class rf0fl_f {
+class smsg_f {
 public:
 	static constexpr std::size_t Offset = 2;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
-	constexpr rf0fl_f(bool value = true) : m_value(value) {}
+	constexpr smsg_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ils_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -2979,15 +2763,15 @@ private:
 };
 
 /**
- * RF0LL
+ * TFERR
  */
-class rf0ll_f {
+class tferr_f {
 public:
 	static constexpr std::size_t Offset = 3;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
-	constexpr rf0ll_f(bool value = true) : m_value(value) {}
+	constexpr tferr_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ils_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -3000,15 +2784,15 @@ private:
 };
 
 /**
- * RF1NL
+ * MISC
  */
-class rf1nl_f {
+class misc_f {
 public:
 	static constexpr std::size_t Offset = 4;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
-	constexpr rf1nl_f(bool value = true) : m_value(value) {}
+	constexpr misc_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ils_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -3021,15 +2805,15 @@ private:
 };
 
 /**
- * RF1WL
+ * BERR
  */
-class rf1wl_f {
+class berr_f {
 public:
 	static constexpr std::size_t Offset = 5;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
-	constexpr rf1wl_f(bool value = true) : m_value(value) {}
+	constexpr berr_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ils_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -3042,15 +2826,15 @@ private:
 };
 
 /**
- * RF1FL
+ * PERR
  */
-class rf1fl_f {
+class perr_f {
 public:
 	static constexpr std::size_t Offset = 6;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
 
-	constexpr rf1fl_f(bool value = true) : m_value(value) {}
+	constexpr perr_f(bool value = true) : m_value(value) {}
 	constexpr operator bool() const {return m_value;}
 	constexpr operator ils_r() const {return m_value ? Mask : 0;}
 	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
@@ -3062,519 +2846,17 @@ private:
 	 bool m_value;
 };
 
-/**
- * RF1LL
- */
-class rf1ll_f {
-public:
-	static constexpr std::size_t Offset = 7;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
-
-	constexpr rf1ll_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * HPML
- */
-class hpml_f {
-public:
-	static constexpr std::size_t Offset = 8;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr hpml_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TCL
- */
-class tcl_f {
-public:
-	static constexpr std::size_t Offset = 9;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr tcl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TCFL
- */
-class tcfl_f {
-public:
-	static constexpr std::size_t Offset = 10;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr tcfl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TFEL
- */
-class tfel_f {
-public:
-	static constexpr std::size_t Offset = 11;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr tfel_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TEFNL
- */
-class tefnl_f {
-public:
-	static constexpr std::size_t Offset = 12;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr tefnl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TEFWL
- */
-class tefwl_f {
-public:
-	static constexpr std::size_t Offset = 13;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr tefwl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TEFFL
- */
-class teffl_f {
-public:
-	static constexpr std::size_t Offset = 14;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr teffl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TEFLL
- */
-class tefll_f {
-public:
-	static constexpr std::size_t Offset = 15;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
-
-	constexpr tefll_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TSWL
- */
-class tswl_f {
-public:
-	static constexpr std::size_t Offset = 16;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr tswl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * MRAFL
- */
-class mrafl_f {
-public:
-	static constexpr std::size_t Offset = 17;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr mrafl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * TOOL
- */
-class tool_f {
-public:
-	static constexpr std::size_t Offset = 18;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr tool_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * DRXL
- */
-class drxl_f {
-public:
-	static constexpr std::size_t Offset = 19;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr drxl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * BECL
- */
-class becl_f {
-public:
-	static constexpr std::size_t Offset = 20;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr becl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * BEUL
- */
-class beul_f {
-public:
-	static constexpr std::size_t Offset = 21;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr beul_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * ELOL
- */
-class elol_f {
-public:
-	static constexpr std::size_t Offset = 22;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr elol_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * EPL
- */
-class epl_f {
-public:
-	static constexpr std::size_t Offset = 23;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr epl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * EWL
- */
-class ewl_f {
-public:
-	static constexpr std::size_t Offset = 24;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr ewl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * BOL
- */
-class bol_f {
-public:
-	static constexpr std::size_t Offset = 25;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr bol_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * WDIL
- */
-class wdil_f {
-public:
-	static constexpr std::size_t Offset = 26;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr wdil_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * PEAL
- */
-class peal_f {
-public:
-	static constexpr std::size_t Offset = 27;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr peal_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * PEDL
- */
-class pedl_f {
-public:
-	static constexpr std::size_t Offset = 28;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr pedl_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-/**
- * ARAL
- */
-class aral_f {
-public:
-	static constexpr std::size_t Offset = 29;
-	static constexpr std::size_t Width = 1;
-	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
-
-	constexpr aral_f(bool value = true) : m_value(value) {}
-	constexpr operator bool() const {return m_value;}
-	constexpr operator ils_r() const {return m_value ? Mask : 0;}
-	static constexpr auto get(ils_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<ils_r>() const {return ClearSet<ils_r>(Mask, *this);}
-	constexpr auto operator|(ils_r other) const -> ils_r { return static_cast<ils_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<ils_r> other) const -> ClearSet<ils_r> {return ClearSet<ils_r>(ils_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 bool m_value;
-};
-
-	[[nodiscard]] constexpr auto rf0nl() const -> rf0nl_f {return rf0nl_f((m_value & rf0nl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf0wl() const -> rf0wl_f {return rf0wl_f((m_value & rf0wl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf0fl() const -> rf0fl_f {return rf0fl_f((m_value & rf0fl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf0ll() const -> rf0ll_f {return rf0ll_f((m_value & rf0ll_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf1nl() const -> rf1nl_f {return rf1nl_f((m_value & rf1nl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf1wl() const -> rf1wl_f {return rf1wl_f((m_value & rf1wl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf1fl() const -> rf1fl_f {return rf1fl_f((m_value & rf1fl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto rf1ll() const -> rf1ll_f {return rf1ll_f((m_value & rf1ll_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto hpml() const -> hpml_f {return hpml_f((m_value & hpml_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tcl() const -> tcl_f {return tcl_f((m_value & tcl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tcfl() const -> tcfl_f {return tcfl_f((m_value & tcfl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tfel() const -> tfel_f {return tfel_f((m_value & tfel_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tefnl() const -> tefnl_f {return tefnl_f((m_value & tefnl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tefwl() const -> tefwl_f {return tefwl_f((m_value & tefwl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto teffl() const -> teffl_f {return teffl_f((m_value & teffl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tefll() const -> tefll_f {return tefll_f((m_value & tefll_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tswl() const -> tswl_f {return tswl_f((m_value & tswl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto mrafl() const -> mrafl_f {return mrafl_f((m_value & mrafl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto tool() const -> tool_f {return tool_f((m_value & tool_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto drxl() const -> drxl_f {return drxl_f((m_value & drxl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto becl() const -> becl_f {return becl_f((m_value & becl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto beul() const -> beul_f {return beul_f((m_value & beul_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto elol() const -> elol_f {return elol_f((m_value & elol_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto epl() const -> epl_f {return epl_f((m_value & epl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto ewl() const -> ewl_f {return ewl_f((m_value & ewl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto bol() const -> bol_f {return bol_f((m_value & bol_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto wdil() const -> wdil_f {return wdil_f((m_value & wdil_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto peal() const -> peal_f {return peal_f((m_value & peal_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto pedl() const -> pedl_f {return pedl_f((m_value & pedl_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto aral() const -> aral_f {return aral_f((m_value & aral_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto rxfifo0() const -> rxfifo0_f {return rxfifo0_f((m_value & rxfifo0_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto rxfifo1() const -> rxfifo1_f {return rxfifo1_f((m_value & rxfifo1_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto smsg() const -> smsg_f {return smsg_f((m_value & smsg_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto tferr() const -> tferr_f {return tferr_f((m_value & tferr_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto misc() const -> misc_f {return misc_f((m_value & misc_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto berr() const -> berr_f {return berr_f((m_value & berr_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto perr() const -> perr_f {return perr_f((m_value & perr_f::Mask) != 0);}
+
+	template<std::size_t Index> struct rxfifo_f { static_assert(Index == 0 || Index == 1); };
+	template<std::size_t Index> using rxfifo_v = typename rxfifo_f<Index>::type;
+	template<std::size_t Index> constexpr auto rxfifo() const { return rxfifo_v<Index>::get(*this); }
 
 	constexpr ils_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(ils_r other) const -> ils_r { return m_value | other.m_value; }
@@ -3745,10 +3027,100 @@ private:
 	 uint8_t m_value;
 };
 
+/**
+ * F1OM
+ */
+class f1om_f {
+public:
+	static constexpr std::size_t Offset = 8;
+	static constexpr std::size_t Width = 1;
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
+
+	constexpr f1om_f(bool value = true) : m_value(value) {}
+	constexpr operator bool() const {return m_value;}
+	constexpr operator rxgfc_r() const {return m_value ? Mask : 0;}
+	static constexpr auto get(rxgfc_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
+	constexpr operator ClearSet<rxgfc_r>() const {return ClearSet<rxgfc_r>(Mask, *this);}
+	constexpr auto operator|(rxgfc_r other) const -> rxgfc_r { return static_cast<rxgfc_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<rxgfc_r> other) const -> ClearSet<rxgfc_r> {return ClearSet<rxgfc_r>(rxgfc_r(Mask) | other.clear(), *this | other.set()); }
+
+private:
+	 bool m_value;
+};
+
+/**
+ * F0OM
+ */
+class f0om_f {
+public:
+	static constexpr std::size_t Offset = 9;
+	static constexpr std::size_t Width = 1;
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
+
+	constexpr f0om_f(bool value = true) : m_value(value) {}
+	constexpr operator bool() const {return m_value;}
+	constexpr operator rxgfc_r() const {return m_value ? Mask : 0;}
+	static constexpr auto get(rxgfc_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
+	constexpr operator ClearSet<rxgfc_r>() const {return ClearSet<rxgfc_r>(Mask, *this);}
+	constexpr auto operator|(rxgfc_r other) const -> rxgfc_r { return static_cast<rxgfc_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<rxgfc_r> other) const -> ClearSet<rxgfc_r> {return ClearSet<rxgfc_r>(rxgfc_r(Mask) | other.clear(), *this | other.set()); }
+
+private:
+	 bool m_value;
+};
+
+/**
+ * LSS
+ */
+class lss_f {
+public:
+	static constexpr std::size_t Offset = 16;
+	static constexpr std::size_t Width = 5;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
+	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+
+	constexpr lss_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator rxgfc_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
+	static constexpr auto get(rxgfc_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
+	constexpr operator ClearSet<rxgfc_r>() const {return ClearSet<rxgfc_r>(Mask, *this);}
+	constexpr auto operator|(rxgfc_r other) const -> rxgfc_r { return static_cast<rxgfc_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<rxgfc_r> other) const -> ClearSet<rxgfc_r> {return ClearSet<rxgfc_r>(rxgfc_r(Mask) | other.clear(), *this | other.set()); }
+
+private:
+	 uint8_t m_value;
+};
+
+/**
+ * LSE
+ */
+class lse_f {
+public:
+	static constexpr std::size_t Offset = 24;
+	static constexpr std::size_t Width = 4;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111);
+	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+
+	constexpr lse_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator rxgfc_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
+	static constexpr auto get(rxgfc_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
+	constexpr operator ClearSet<rxgfc_r>() const {return ClearSet<rxgfc_r>(Mask, *this);}
+	constexpr auto operator|(rxgfc_r other) const -> rxgfc_r { return static_cast<rxgfc_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<rxgfc_r> other) const -> ClearSet<rxgfc_r> {return ClearSet<rxgfc_r>(rxgfc_r(Mask) | other.clear(), *this | other.set()); }
+
+private:
+	 uint8_t m_value;
+};
+
 	[[nodiscard]] constexpr auto rrfe() const -> rrfe_f {return rrfe_f((m_value & rrfe_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rrfs() const -> rrfs_f {return rrfs_f((m_value & rrfs_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto anfe() const -> anfe_f {return anfe_f(static_cast<uint8_t>(m_value >> anfe_f::Offset));}
 	[[nodiscard]] constexpr auto anfs() const -> anfs_f {return anfs_f(static_cast<uint8_t>(m_value >> anfs_f::Offset));}
+	[[nodiscard]] constexpr auto f1om() const -> f1om_f {return f1om_f((m_value & f1om_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto f0om() const -> f0om_f {return f0om_f((m_value & f0om_f::Mask) != 0);}
+	[[nodiscard]] constexpr auto lss() const -> lss_f {return lss_f(static_cast<uint8_t>(m_value >> lss_f::Offset));}
+	[[nodiscard]] constexpr auto lse() const -> lse_f {return lse_f(static_cast<uint8_t>(m_value >> lse_f::Offset));}
 
 	constexpr rxgfc_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(rxgfc_r other) const -> rxgfc_r { return m_value | other.m_value; }
@@ -3814,8 +3186,8 @@ public:
 class bidx_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
 	constexpr bidx_f(uint8_t value) : m_value(value & Range) {}
@@ -3858,8 +3230,8 @@ private:
 class fidx_f {
 public:
 	static constexpr std::size_t Offset = 8;
-	static constexpr std::size_t Width = 7;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111111);
+	static constexpr std::size_t Width = 5;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
 	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
 
 	constexpr fidx_f(uint8_t value) : m_value(value & Range) {}
@@ -3923,8 +3295,8 @@ public:
 class f0fl_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 7;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111111);
+	static constexpr std::size_t Width = 4;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
 	constexpr f0fl_f(uint8_t value) : m_value(value & Range) {}
@@ -3945,8 +3317,8 @@ private:
 class f0gi_f {
 public:
 	static constexpr std::size_t Offset = 8;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
 
 	constexpr f0gi_f(uint8_t value) : m_value(value & Range) {}
@@ -3967,8 +3339,8 @@ private:
 class f0pi_f {
 public:
 	static constexpr std::size_t Offset = 16;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
 
 	constexpr f0pi_f(uint8_t value) : m_value(value & Range) {}
@@ -4054,8 +3426,8 @@ public:
 class f0ai_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
 	constexpr f0ai_f(uint8_t value) : m_value(value & Range) {}
@@ -4095,8 +3467,8 @@ public:
 class f1fl_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 7;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111111);
+	static constexpr std::size_t Width = 4;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b1111);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
 	constexpr f1fl_f(uint8_t value) : m_value(value & Range) {}
@@ -4117,8 +3489,8 @@ private:
 class f1gi_f {
 public:
 	static constexpr std::size_t Offset = 8;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
 
 	constexpr f1gi_f(uint8_t value) : m_value(value & Range) {}
@@ -4139,8 +3511,8 @@ private:
 class f1pi_f {
 public:
 	static constexpr std::size_t Offset = 16;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
 
 	constexpr f1pi_f(uint8_t value) : m_value(value & Range) {}
@@ -4197,34 +3569,11 @@ private:
 	 bool m_value;
 };
 
-/**
- * DMS
- */
-class dms_f {
-public:
-	static constexpr std::size_t Offset = 30;
-	static constexpr std::size_t Width = 2;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
-
-	constexpr dms_f(uint8_t value) : m_value(value & Range) {}
-	constexpr operator uint8_t() const {return m_value;}
-	constexpr operator rxf1s_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(rxf1s_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<rxf1s_r>() const {return ClearSet<rxf1s_r>(Mask, *this);}
-	constexpr auto operator|(rxf1s_r other) const -> rxf1s_r { return static_cast<rxf1s_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<rxf1s_r> other) const -> ClearSet<rxf1s_r> {return ClearSet<rxf1s_r>(rxf1s_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 uint8_t m_value;
-};
-
 	[[nodiscard]] constexpr auto f1fl() const -> f1fl_f {return f1fl_f(static_cast<uint8_t>(m_value >> f1fl_f::Offset));}
 	[[nodiscard]] constexpr auto f1gi() const -> f1gi_f {return f1gi_f(static_cast<uint8_t>(m_value >> f1gi_f::Offset));}
 	[[nodiscard]] constexpr auto f1pi() const -> f1pi_f {return f1pi_f(static_cast<uint8_t>(m_value >> f1pi_f::Offset));}
 	[[nodiscard]] constexpr auto f1f() const -> f1f_f {return f1f_f((m_value & f1f_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto rf1l() const -> rf1l_f {return rf1l_f((m_value & rf1l_f::Mask) != 0);}
-	[[nodiscard]] constexpr auto dms() const -> dms_f {return dms_f(static_cast<uint8_t>(m_value >> dms_f::Offset));}
 
 	constexpr rxf1s_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(rxf1s_r other) const -> rxf1s_r { return m_value | other.m_value; }
@@ -4249,8 +3598,8 @@ public:
 class f1ai_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
 	constexpr f1ai_f(uint8_t value) : m_value(value & Range) {}
@@ -4285,77 +3634,11 @@ class txbc_r {
 public:
 
 /**
- * TBSA
- */
-class tbsa_f {
-public:
-	static constexpr std::size_t Offset = 2;
-	static constexpr std::size_t Width = 14;
-	static constexpr uint16_t Range = static_cast<uint16_t>(0b11111111111111);
-	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
-
-	constexpr tbsa_f(uint16_t value) : m_value(value & Range) {}
-	constexpr operator uint16_t() const {return m_value;}
-	constexpr operator txbc_r() const {return static_cast<uint16_t>(static_cast<uint16_t>(m_value) << Offset);}
-	static constexpr auto get(txbc_r value) -> uint16_t { return static_cast<uint16_t>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<txbc_r>() const {return ClearSet<txbc_r>(Mask, *this);}
-	constexpr auto operator|(txbc_r other) const -> txbc_r { return static_cast<txbc_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<txbc_r> other) const -> ClearSet<txbc_r> {return ClearSet<txbc_r>(txbc_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 uint16_t m_value;
-};
-
-/**
- * NDTB
- */
-class ndtb_f {
-public:
-	static constexpr std::size_t Offset = 16;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
-
-	constexpr ndtb_f(uint8_t value) : m_value(value & Range) {}
-	constexpr operator uint8_t() const {return m_value;}
-	constexpr operator txbc_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbc_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<txbc_r>() const {return ClearSet<txbc_r>(Mask, *this);}
-	constexpr auto operator|(txbc_r other) const -> txbc_r { return static_cast<txbc_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<txbc_r> other) const -> ClearSet<txbc_r> {return ClearSet<txbc_r>(txbc_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 uint8_t m_value;
-};
-
-/**
- * TFQS
- */
-class tfqs_f {
-public:
-	static constexpr std::size_t Offset = 24;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
-
-	constexpr tfqs_f(uint8_t value) : m_value(value & Range) {}
-	constexpr operator uint8_t() const {return m_value;}
-	constexpr operator txbc_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbc_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
-	constexpr operator ClearSet<txbc_r>() const {return ClearSet<txbc_r>(Mask, *this);}
-	constexpr auto operator|(txbc_r other) const -> txbc_r { return static_cast<txbc_r>(*this) | other.m_value;}
-	constexpr auto operator||(ClearSet<txbc_r> other) const -> ClearSet<txbc_r> {return ClearSet<txbc_r>(txbc_r(Mask) | other.clear(), *this | other.set()); }
-
-private:
-	 uint8_t m_value;
-};
-
-/**
  * TFQM
  */
 class tfqm_f {
 public:
-	static constexpr std::size_t Offset = 30;
+	static constexpr std::size_t Offset = 24;
 	static constexpr std::size_t Width = 1;
 	static constexpr uint32_t Mask = static_cast<uint32_t>(1ULL << Offset);
 
@@ -4371,9 +3654,6 @@ private:
 	 bool m_value;
 };
 
-	[[nodiscard]] constexpr auto tbsa() const -> tbsa_f {return tbsa_f(static_cast<uint16_t>(m_value >> tbsa_f::Offset));}
-	[[nodiscard]] constexpr auto ndtb() const -> ndtb_f {return ndtb_f(static_cast<uint8_t>(m_value >> ndtb_f::Offset));}
-	[[nodiscard]] constexpr auto tfqs() const -> tfqs_f {return tfqs_f(static_cast<uint8_t>(m_value >> tfqs_f::Offset));}
 	[[nodiscard]] constexpr auto tfqm() const -> tfqm_f {return tfqm_f((m_value & tfqm_f::Mask) != 0);}
 
 	constexpr txbc_r(uint32_t value) : m_value(value) {}
@@ -4399,8 +3679,8 @@ public:
 class tffl_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
 	constexpr tffl_f(uint8_t value) : m_value(value & Range) {}
@@ -4421,8 +3701,8 @@ private:
 class tfgi_f {
 public:
 	static constexpr std::size_t Offset = 8;
-	static constexpr std::size_t Width = 5;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
 
 	constexpr tfgi_f(uint8_t value) : m_value(value & Range) {}
@@ -4443,8 +3723,8 @@ private:
 class tfqpi_f {
 public:
 	static constexpr std::size_t Offset = 16;
-	static constexpr std::size_t Width = 5;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
 
 	constexpr tfqpi_f(uint8_t value) : m_value(value & Range) {}
@@ -4491,7 +3771,7 @@ private:
 	[[nodiscard]] constexpr auto value() const -> uint32_t { return m_value; }
 
 	static constexpr std::size_t Offset = 196;
-	static constexpr uint32_t ResetValue = 0; // 0 0x0
+	static constexpr uint32_t ResetValue = 0b11; // 3 0x3
 
 private:
 	uint32_t m_value;
@@ -4508,23 +3788,23 @@ public:
 class trp_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 32;
-	static constexpr uint32_t Range = static_cast<uint32_t>(0b11111111111111111111111111111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr trp_f(uint32_t value) : m_value(value) {}
-	constexpr operator uint32_t() const {return m_value;}
-	constexpr operator txbrp_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbrp_r value) -> uint32_t { return static_cast<uint32_t>((value.value() >> Offset) & Mask); }
+	constexpr trp_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator txbrp_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	static constexpr auto get(txbrp_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
 	constexpr operator ClearSet<txbrp_r>() const {return ClearSet<txbrp_r>(Mask, *this);}
 	constexpr auto operator|(txbrp_r other) const -> txbrp_r { return static_cast<txbrp_r>(*this) | other.m_value;}
 	constexpr auto operator||(ClearSet<txbrp_r> other) const -> ClearSet<txbrp_r> {return ClearSet<txbrp_r>(txbrp_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
-	 uint32_t m_value;
+	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto trp() const -> trp_f {return trp_f(static_cast<uint32_t>(m_value >> trp_f::Offset));}
+	[[nodiscard]] constexpr auto trp() const -> trp_f {return trp_f(static_cast<uint8_t>(m_value >> trp_f::Offset));}
 
 	constexpr txbrp_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(txbrp_r other) const -> txbrp_r { return m_value | other.m_value; }
@@ -4549,23 +3829,23 @@ public:
 class ar_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 32;
-	static constexpr uint32_t Range = static_cast<uint32_t>(0b11111111111111111111111111111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr ar_f(uint32_t value) : m_value(value) {}
-	constexpr operator uint32_t() const {return m_value;}
-	constexpr operator txbar_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbar_r value) -> uint32_t { return static_cast<uint32_t>((value.value() >> Offset) & Mask); }
+	constexpr ar_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator txbar_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	static constexpr auto get(txbar_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
 	constexpr operator ClearSet<txbar_r>() const {return ClearSet<txbar_r>(Mask, *this);}
 	constexpr auto operator|(txbar_r other) const -> txbar_r { return static_cast<txbar_r>(*this) | other.m_value;}
 	constexpr auto operator||(ClearSet<txbar_r> other) const -> ClearSet<txbar_r> {return ClearSet<txbar_r>(txbar_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
-	 uint32_t m_value;
+	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto ar() const -> ar_f {return ar_f(static_cast<uint32_t>(m_value >> ar_f::Offset));}
+	[[nodiscard]] constexpr auto ar() const -> ar_f {return ar_f(static_cast<uint8_t>(m_value >> ar_f::Offset));}
 
 	constexpr txbar_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(txbar_r other) const -> txbar_r { return m_value | other.m_value; }
@@ -4590,23 +3870,23 @@ public:
 class cr_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 32;
-	static constexpr uint32_t Range = static_cast<uint32_t>(0b11111111111111111111111111111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr cr_f(uint32_t value) : m_value(value) {}
-	constexpr operator uint32_t() const {return m_value;}
-	constexpr operator txbcr_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbcr_r value) -> uint32_t { return static_cast<uint32_t>((value.value() >> Offset) & Mask); }
+	constexpr cr_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator txbcr_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	static constexpr auto get(txbcr_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
 	constexpr operator ClearSet<txbcr_r>() const {return ClearSet<txbcr_r>(Mask, *this);}
 	constexpr auto operator|(txbcr_r other) const -> txbcr_r { return static_cast<txbcr_r>(*this) | other.m_value;}
 	constexpr auto operator||(ClearSet<txbcr_r> other) const -> ClearSet<txbcr_r> {return ClearSet<txbcr_r>(txbcr_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
-	 uint32_t m_value;
+	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto cr() const -> cr_f {return cr_f(static_cast<uint32_t>(m_value >> cr_f::Offset));}
+	[[nodiscard]] constexpr auto cr() const -> cr_f {return cr_f(static_cast<uint8_t>(m_value >> cr_f::Offset));}
 
 	constexpr txbcr_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(txbcr_r other) const -> txbcr_r { return m_value | other.m_value; }
@@ -4631,23 +3911,23 @@ public:
 class to_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 32;
-	static constexpr uint32_t Range = static_cast<uint32_t>(0b11111111111111111111111111111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr to_f(uint32_t value) : m_value(value) {}
-	constexpr operator uint32_t() const {return m_value;}
-	constexpr operator txbto_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbto_r value) -> uint32_t { return static_cast<uint32_t>((value.value() >> Offset) & Mask); }
+	constexpr to_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator txbto_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	static constexpr auto get(txbto_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
 	constexpr operator ClearSet<txbto_r>() const {return ClearSet<txbto_r>(Mask, *this);}
 	constexpr auto operator|(txbto_r other) const -> txbto_r { return static_cast<txbto_r>(*this) | other.m_value;}
 	constexpr auto operator||(ClearSet<txbto_r> other) const -> ClearSet<txbto_r> {return ClearSet<txbto_r>(txbto_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
-	 uint32_t m_value;
+	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto to() const -> to_f {return to_f(static_cast<uint32_t>(m_value >> to_f::Offset));}
+	[[nodiscard]] constexpr auto to() const -> to_f {return to_f(static_cast<uint8_t>(m_value >> to_f::Offset));}
 
 	constexpr txbto_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(txbto_r other) const -> txbto_r { return m_value | other.m_value; }
@@ -4672,23 +3952,23 @@ public:
 class cf_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 32;
-	static constexpr uint32_t Range = static_cast<uint32_t>(0b11111111111111111111111111111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr cf_f(uint32_t value) : m_value(value) {}
-	constexpr operator uint32_t() const {return m_value;}
-	constexpr operator txbcf_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbcf_r value) -> uint32_t { return static_cast<uint32_t>((value.value() >> Offset) & Mask); }
+	constexpr cf_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator txbcf_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	static constexpr auto get(txbcf_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
 	constexpr operator ClearSet<txbcf_r>() const {return ClearSet<txbcf_r>(Mask, *this);}
 	constexpr auto operator|(txbcf_r other) const -> txbcf_r { return static_cast<txbcf_r>(*this) | other.m_value;}
 	constexpr auto operator||(ClearSet<txbcf_r> other) const -> ClearSet<txbcf_r> {return ClearSet<txbcf_r>(txbcf_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
-	 uint32_t m_value;
+	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto cf() const -> cf_f {return cf_f(static_cast<uint32_t>(m_value >> cf_f::Offset));}
+	[[nodiscard]] constexpr auto cf() const -> cf_f {return cf_f(static_cast<uint8_t>(m_value >> cf_f::Offset));}
 
 	constexpr txbcf_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(txbcf_r other) const -> txbcf_r { return m_value | other.m_value; }
@@ -4713,23 +3993,23 @@ public:
 class tie_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 32;
-	static constexpr uint32_t Range = static_cast<uint32_t>(0b11111111111111111111111111111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr tie_f(uint32_t value) : m_value(value) {}
-	constexpr operator uint32_t() const {return m_value;}
-	constexpr operator txbtie_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbtie_r value) -> uint32_t { return static_cast<uint32_t>((value.value() >> Offset) & Mask); }
+	constexpr tie_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator txbtie_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	static constexpr auto get(txbtie_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
 	constexpr operator ClearSet<txbtie_r>() const {return ClearSet<txbtie_r>(Mask, *this);}
 	constexpr auto operator|(txbtie_r other) const -> txbtie_r { return static_cast<txbtie_r>(*this) | other.m_value;}
 	constexpr auto operator||(ClearSet<txbtie_r> other) const -> ClearSet<txbtie_r> {return ClearSet<txbtie_r>(txbtie_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
-	 uint32_t m_value;
+	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto tie() const -> tie_f {return tie_f(static_cast<uint32_t>(m_value >> tie_f::Offset));}
+	[[nodiscard]] constexpr auto tie() const -> tie_f {return tie_f(static_cast<uint8_t>(m_value >> tie_f::Offset));}
 
 	constexpr txbtie_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(txbtie_r other) const -> txbtie_r { return m_value | other.m_value; }
@@ -4754,23 +4034,23 @@ public:
 class cfie_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 32;
-	static constexpr uint32_t Range = static_cast<uint32_t>(0b11111111111111111111111111111111);
-	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
+	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
-	constexpr cfie_f(uint32_t value) : m_value(value) {}
-	constexpr operator uint32_t() const {return m_value;}
-	constexpr operator txbcie_r() const {return static_cast<uint32_t>(static_cast<uint32_t>(m_value) << Offset);}
-	static constexpr auto get(txbcie_r value) -> uint32_t { return static_cast<uint32_t>((value.value() >> Offset) & Mask); }
+	constexpr cfie_f(uint8_t value) : m_value(value & Range) {}
+	constexpr operator uint8_t() const {return m_value;}
+	constexpr operator txbcie_r() const {return static_cast<uint8_t>(static_cast<uint8_t>(m_value) << Offset);}
+	static constexpr auto get(txbcie_r value) -> uint8_t { return static_cast<uint8_t>((value.value() >> Offset) & Mask); }
 	constexpr operator ClearSet<txbcie_r>() const {return ClearSet<txbcie_r>(Mask, *this);}
 	constexpr auto operator|(txbcie_r other) const -> txbcie_r { return static_cast<txbcie_r>(*this) | other.m_value;}
 	constexpr auto operator||(ClearSet<txbcie_r> other) const -> ClearSet<txbcie_r> {return ClearSet<txbcie_r>(txbcie_r(Mask) | other.clear(), *this | other.set()); }
 
 private:
-	 uint32_t m_value;
+	 uint8_t m_value;
 };
 
-	[[nodiscard]] constexpr auto cfie() const -> cfie_f {return cfie_f(static_cast<uint32_t>(m_value >> cfie_f::Offset));}
+	[[nodiscard]] constexpr auto cfie() const -> cfie_f {return cfie_f(static_cast<uint8_t>(m_value >> cfie_f::Offset));}
 
 	constexpr txbcie_r(uint32_t value) : m_value(value) {}
 	constexpr auto operator |(txbcie_r other) const -> txbcie_r { return m_value | other.m_value; }
@@ -4795,8 +4075,8 @@ public:
 class effl_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 6;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b111111);
+	static constexpr std::size_t Width = 3;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b111);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
 	constexpr effl_f(uint8_t value) : m_value(value & Range) {}
@@ -4817,8 +4097,8 @@ private:
 class efgi_f {
 public:
 	static constexpr std::size_t Offset = 8;
-	static constexpr std::size_t Width = 5;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint16_t Mask = static_cast<uint16_t>(static_cast<uint16_t>(Range) << Offset);
 
 	constexpr efgi_f(uint8_t value) : m_value(value & Range) {}
@@ -4839,8 +4119,8 @@ private:
 class efpi_f {
 public:
 	static constexpr std::size_t Offset = 16;
-	static constexpr std::size_t Width = 5;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint32_t Mask = static_cast<uint32_t>(static_cast<uint32_t>(Range) << Offset);
 
 	constexpr efpi_f(uint8_t value) : m_value(value & Range) {}
@@ -4926,8 +4206,8 @@ public:
 class efai_f {
 public:
 	static constexpr std::size_t Offset = 0;
-	static constexpr std::size_t Width = 5;
-	static constexpr uint8_t Range = static_cast<uint8_t>(0b11111);
+	static constexpr std::size_t Width = 2;
+	static constexpr uint8_t Range = static_cast<uint8_t>(0b11);
 	static constexpr uint8_t Mask = static_cast<uint8_t>(static_cast<uint8_t>(Range) << Offset);
 
 	constexpr efai_f(uint8_t value) : m_value(value & Range) {}
@@ -5023,7 +4303,7 @@ private:
 	Memory<uint32_t,xidam_r> xidam;
 	ReadOnlyMemory<uint32_t,hpms_r> hpms;
 	Padding<4> _p140;
-	Memory<uint32_t,rxf0s_r> rxf0s;
+	ReadOnlyMemory<uint32_t,rxf0s_r> rxf0s;
 	Memory<uint32_t,rxf0a_r> rxf0a;
 	ReadOnlyMemory<uint32_t,rxf1s_r> rxf1s;
 	Memory<uint32_t,rxf1a_r> rxf1a;
@@ -5045,6 +4325,12 @@ private:
 
 template<> struct fdcan_p::dbtp_r::dtseg_f<2> { using type = fdcan_p::dbtp_r::dtseg2_f; };
 template<> struct fdcan_p::dbtp_r::dtseg_f<1> { using type = fdcan_p::dbtp_r::dtseg1_f; };
+
+template<> struct fdcan_p::nbtp_r::ntseg_f<2> { using type = fdcan_p::nbtp_r::ntseg2_f; };
+template<> struct fdcan_p::nbtp_r::ntseg_f<1> { using type = fdcan_p::nbtp_r::ntseg1_f; };
+
+template<> struct fdcan_p::ils_r::rxfifo_f<0> { using type = fdcan_p::ils_r::rxfifo0_f; };
+template<> struct fdcan_p::ils_r::rxfifo_f<1> { using type = fdcan_p::ils_r::rxfifo1_f; };
 
 template<> struct fdcan_p::ile_r::eint_f<0> { using type = fdcan_p::ile_r::eint0_f; };
 template<> struct fdcan_p::ile_r::eint_f<1> { using type = fdcan_p::ile_r::eint1_f; };

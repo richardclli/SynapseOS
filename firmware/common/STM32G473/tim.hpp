@@ -4969,6 +4969,46 @@ private:
 	uint32_t m_value;
 };
 /**
+ * TIM option register 1
+ */
+class or1_r {
+public:
+
+/**
+ * HSE Divided by 32 enable
+ */
+class hse32en_f {
+public:
+	static constexpr std::size_t Offset = 0;
+	static constexpr std::size_t Width = 1;
+	static constexpr uint8_t Mask = static_cast<uint8_t>(1ULL << Offset);
+
+	constexpr hse32en_f(bool value = true) : m_value(value) {}
+	constexpr operator bool() const {return m_value;}
+	constexpr operator or1_r() const {return m_value ? Mask : 0;}
+	static constexpr auto get(or1_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
+	constexpr operator ClearSet<or1_r>() const {return ClearSet<or1_r>(Mask, *this);}
+	constexpr auto operator|(or1_r other) const -> or1_r { return static_cast<or1_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<or1_r> other) const -> ClearSet<or1_r> {return ClearSet<or1_r>(or1_r(Mask) | other.clear(), *this | other.set()); }
+
+private:
+	 bool m_value;
+};
+
+	[[nodiscard]] constexpr auto hse32en() const -> hse32en_f {return hse32en_f((m_value & hse32en_f::Mask) != 0);}
+
+	constexpr or1_r(uint32_t value) : m_value(value) {}
+	constexpr auto operator |(or1_r other) const -> or1_r { return m_value | other.m_value; }
+	constexpr auto operator ~() const -> or1_r { return ~m_value; }
+	[[nodiscard]] constexpr auto value() const -> uint32_t { return m_value; }
+
+	static constexpr std::size_t Offset = 104;
+	static constexpr uint32_t ResetValue = 0; // 0 0x0
+
+private:
+	uint32_t m_value;
+};
+/**
  * DMA control register
  */
 class dcr_r {
@@ -5107,7 +5147,8 @@ private:
 	Memory<uint32_t,tisel_r> tisel;
 	Memory<uint32_t,af1_r> af1;
 	Memory<uint32_t,af2_r> af2;
-	Padding<884> _p104;
+	Memory<uint32_t,or1_r> or1;
+	Padding<880> _p108;
 	Memory<uint32_t,dcr_r> dcr;
 	Memory<uint32_t,dmar_r> dmar;
 };
@@ -5143,6 +5184,7 @@ static_assert(offsetof(tim16_p, dtr2) == tim16_p::dtr2_r::Offset);
 static_assert(offsetof(tim16_p, tisel) == tim16_p::tisel_r::Offset);
 static_assert(offsetof(tim16_p, af1) == tim16_p::af1_r::Offset);
 static_assert(offsetof(tim16_p, af2) == tim16_p::af2_r::Offset);
+static_assert(offsetof(tim16_p, or1) == tim16_p::or1_r::Offset);
 static_assert(offsetof(tim16_p, dcr) == tim16_p::dcr_r::Offset);
 static_assert(offsetof(tim16_p, dmar) == tim16_p::dmar_r::Offset);
 

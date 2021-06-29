@@ -78,7 +78,7 @@ public:
 		tim3.egr = tim2_p::egr_r::ug_f();
 		tim3.cr1 = tim2_p::cr1_r::cen_f();
 
-		m_task.start(updateTaskProc);
+		m_task.start(updateTaskProc, "LED Task");
 	}
 
 
