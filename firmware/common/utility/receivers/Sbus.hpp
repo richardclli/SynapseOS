@@ -20,7 +20,7 @@ public:
 	{
 		RxUart::reversePolarity(true);
 		RxUart::set(Pull::Down);
-		RxUart::setSpeed(Baudrate);
+		RxUart::setSpeed(Baudrate, true);
 		RxUart::onReceived([&](Event event, uint8_t value) { eventReceived(event, value); });
 	}
 

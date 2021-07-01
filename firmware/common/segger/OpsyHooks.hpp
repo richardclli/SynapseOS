@@ -174,6 +174,18 @@ public:
 
 	static void boot(uint32_t coreClock);
 
+	template<void(*Routine)()>
+	static constexpr auto decorateIsr()
+	{
+		return []()
+		{
+			SEGGER_SYSVIEW_RecordEnterISR();
+			Routine();
+			SEGGER_SYSVIEW_RecordExitISR();
+		};
+	}
+
+
 private:
 
 	enum class ReasonForReadyStop

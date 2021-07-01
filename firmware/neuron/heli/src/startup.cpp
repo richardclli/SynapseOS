@@ -5,6 +5,7 @@
 #include <Scheduler.hpp>
 #include "Bsp.hpp"
 
+
 extern "C"
 {
 extern void __libc_init_array();
@@ -20,11 +21,14 @@ uint32_t SystemCoreClock = 84000000;
 }
 
 extern "C" void Reset_Handler();
-extern "C" constexpr auto __attribute__((section(".isr_vector"))) vector = InterruptVector<IrqCount>(&_estack, Reset_Handler, SysTick_Handler, SVC_Handler, PendSV_Handler)
-		.Register<DMA2_Stream0_IRQn>(neuron::mpu_spi::isrHandler)
-		.Register<EXTI0_IRQn>(neuron::mpu_exti::isrHandler);
 
-extern "C" int main()
+constexpr auto __attribute__((section(".isr_vector"))) vector = InterruptVector<IrqCount>(&_estack, Reset_Handler, SysTick_Handler, SVC_Handler, PendSV_Handler)
+		.Register<DMA2_Stream0_IRQn, neuron::mpu_spi::isrHandler>()
+		.Register<EXTI0_IRQn, neuron::mpu_exti::isrHandler>()
+		.Register<USART6_IRQn, neuron::rxuart::uartIsrHandler>()
+		.Register<TIM1_UP_TIM10_IRQn, neuron::rxuart::timIsrHandler>();
+
+int main()
 {
 	opsy::CortexM::enableFpu();
 	__libc_init_array();
@@ -32,7 +36,7 @@ extern "C" int main()
 	opsy::Scheduler::start();
 }
 
-extern "C" __attribute__((naked)) void Reset_Handler()
+__attribute__((naked)) void Reset_Handler()
 {
 	opsy::CortexM::setMsp(&_estack);
 	auto vtor = reinterpret_cast<const IsrHandler**>(reinterpret_cast<uint32_t>(&vector));

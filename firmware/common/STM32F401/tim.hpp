@@ -2296,6 +2296,27 @@ class ccer_r {
 public:
 
 /**
+ * Capture/Compare 4 output Polarity
+ */
+class cc4np_f {
+public:
+	static constexpr std::size_t Offset = 15;
+	static constexpr std::size_t Width = 1;
+	static constexpr uint16_t Mask = static_cast<uint16_t>(1ULL << Offset);
+
+	constexpr cc4np_f(bool value = true) : m_value(value) {}
+	constexpr operator bool() const {return m_value;}
+	constexpr operator ccer_r() const {return m_value ? Mask : 0;}
+	static constexpr auto get(ccer_r value) -> bool { return static_cast<bool>((value.value() >> Offset) & Mask); }
+	constexpr operator ClearSet<ccer_r>() const {return ClearSet<ccer_r>(Mask, *this);}
+	constexpr auto operator|(ccer_r other) const -> ccer_r { return static_cast<ccer_r>(*this) | other.m_value;}
+	constexpr auto operator||(ClearSet<ccer_r> other) const -> ClearSet<ccer_r> {return ClearSet<ccer_r>(ccer_r(Mask) | other.clear(), *this | other.set()); }
+
+private:
+	 bool m_value;
+};
+
+/**
  * Capture/Compare 3 output Polarity
  */
 class cc4p_f {
@@ -2589,6 +2610,7 @@ private:
 	 bool m_value;
 };
 
+	[[nodiscard]] constexpr auto cc4np() const -> cc4np_f {return cc4np_f((m_value & cc4np_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto cc4p() const -> cc4p_f {return cc4p_f((m_value & cc4p_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto cc4e() const -> cc4e_f {return cc4e_f((m_value & cc4e_f::Mask) != 0);}
 	[[nodiscard]] constexpr auto cc3np() const -> cc3np_f {return cc3np_f((m_value & cc3np_f::Mask) != 0);}
