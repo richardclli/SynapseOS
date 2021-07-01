@@ -12,6 +12,7 @@ The PLL uses these values:
 - N = 336
 - P = 4
 - Q = 7
+
 To get a final SystemCoreClock at 84MHz.
 
 ## RC Receiver
