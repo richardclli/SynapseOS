@@ -51,22 +51,22 @@
 |ITG_SCK|PA5|SPI1_SCK|5||
 |ITG_MISO|PA6|SPI1_MISO|5||
 |ITG_MOSI|PA7|SPI1_MOSI|5||
-|ITG_INT|PB0|EXTI0|/||
+|ITG_INT|PB0|EXTI0|/|Interrupt line from MPU9250|
 
 ## Governor
 
 | Name | STM32 Pin | STM32 Function | STM32 AF | Remark |
 |:---:|:---:|:---:|:---:|:---:|
-|GOV|PA15|TIM2_CH1|1||
+|GOV|PA15|TIM2_CH1|1|Has external 10k pull up|
 
 ## Direct Memory Access (DMA)
 
 | Peripheral function | DMA | Stream | Channel|
 | :---: | :---:| :---:| :---:|
-|SPI1_RX|DMA2|3|3|
-|SPI1_TX|DMA2|0|3|
-|USART1_RX|DMA2|5|4|
-|USART1_TX|DMA2|7|4|
+|SPI1_RX|2|3|3|
+|SPI1_TX|2|0|3|
+|USART1_RX|2|5|4|
+|USART1_TX|2|7|4|
 
 # Current Version
 
