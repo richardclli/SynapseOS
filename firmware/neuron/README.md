@@ -4,6 +4,16 @@
 
 # Ressources
 
+## Clock
+
+An external ceramic resonator is connected to the STM32. It runs at 8MHz.
+The PLL uses these values:
+- M = 8
+- N = 336
+- P = 4
+- Q = 7
+To get a final SystemCoreClock at 84MHz.
+
 ## RC Receiver
 
 | Name | STM32 Pin | STM32 Function | STM32 AF | Remark |
