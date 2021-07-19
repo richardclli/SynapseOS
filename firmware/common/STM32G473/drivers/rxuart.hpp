@@ -16,6 +16,8 @@
 #include <usart.hpp>
 #include <tim.hpp>
 
+extern "C" uint32_t SystemCoreClock;
+
 using namespace STM32G473XX;
 
 namespace neuron2

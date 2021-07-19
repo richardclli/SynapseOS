@@ -12477,6 +12477,13 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
           <resetValue>0x0000</resetValue>
           <fields>
             <field>
+              <name>CC4NP</name>
+              <description>Capture/Compare 4 output
+              Polarity</description>
+              <bitOffset>15</bitOffset>
+              <bitWidth>1</bitWidth>
+            </field>
+            <field>
               <name>CC4P</name>
               <description>Capture/Compare 3 output
               Polarity</description>

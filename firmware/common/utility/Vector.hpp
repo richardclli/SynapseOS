@@ -166,6 +166,82 @@ public:
 		return m_values[Index];
 	}
 
+#if __cplusplus >= 201709L
+
+	/**
+	 * Gets the @c x (first) value in the @c Vector
+	 * @return The @c x value
+	 */
+	constexpr const ItemType& x() const requires (Size == 2 || Size == 3 || Size == 4)
+	{
+		return m_values[0];
+	}
+
+	/**
+	 * Gets the @c x (first) value in the @c Vector
+	 * @return The @c x value
+	 */
+	constexpr ItemType& x() requires (Size == 2 || Size == 3 || Size == 4)
+	{
+		return m_values[0];
+	}
+
+	/**
+	 * Gets the @c y (second) value in the @c Vector
+	 * @return The @c y value
+	 */
+	constexpr const ItemType& y() const requires (Size == 2 || Size == 3 || Size == 4)
+	{
+		return m_values[1];
+	}
+
+	/**
+	 * Gets the @c y (second) value in the @c Vector
+	 * @return The @c y value
+	 */
+	constexpr ItemType& y() requires (Size == 2 || Size == 3 || Size == 4)
+	{
+		return m_values[1];
+	}
+
+	/**
+	 * Gets the @c z (third) value in the @c Vector
+	 * @return The @c z value
+	 */
+	constexpr const ItemType& z() const requires (Size == 3 || Size == 4)
+	{
+		return m_values[2];
+	}
+
+	/**
+	 * Gets the @c z (third) value in the @c Vector
+	 * @return The @c z value
+	 */
+	constexpr ItemType& z() requires (Size == 3 || Size == 4)
+	{
+		return m_values[2];
+	}
+
+	/**
+	 * Gets the @c w (fourth) value in the @c Vector
+	 * @return The @c w value
+	 */
+	constexpr const ItemType& w() const requires (Size == 4)
+	{
+		return m_values[3];
+	}
+
+	/**
+	 * Gets the @c w (fourth) value in the @c Vector
+	 * @return The @c w value
+	 */
+	constexpr ItemType& w() requires (Size == 4)
+	{
+		return m_values[3];
+	}
+
+#else
+
 	/**
 	 * Gets the @c x (first) value in the @c Vector
 	 * @return The @c x value
@@ -245,6 +321,8 @@ public:
 	{
 		return m_values[3];
 	}
+
+#endif
 
 	/**
 	 * Appends a new value to the current @c Vector

@@ -7,6 +7,9 @@
 #include <Scheduler.hpp>
 
 #include "Bsp.hpp"
+#include <Hooks.hpp>
+
+#include <scb.hpp>
 
 
 extern "C"
@@ -36,10 +39,18 @@ extern "C" constexpr auto __attribute__((section(".isr_vector"))) vector = Inter
 		.Register<TIM1_UP_TIM16_IRQn>(neuron2::rxuart::timIsrHandler)
 		.Register<USART3_IRQn>(neuron2::rxuart::uartIsrHandler);
 
-extern "C" void Reset_Handler()
+extern "C" int main()
+{
+	opsy::CortexM::enableFpu();
+	__libc_init_array();
+	Bsp::initialize();
+	opsy::Scheduler::start();
+}
+
+extern "C" __attribute__((naked)) void Reset_Handler()
 {
 	opsy::CortexM::setMsp(&_estack);
-	auto vtor = reinterpret_cast<const IsrHandler**>(reinterpret_cast<const uint32_t>(&vector));
+	auto vtor = reinterpret_cast<const IsrHandler**>(reinterpret_cast<uint32_t>(&vector));
 	opsy::CortexM::moveVtor(vtor);
 
 	// initializes the data memory by copying from flash to ram
@@ -50,10 +61,13 @@ extern "C" void Reset_Handler()
 	for(auto ptr = &_sbss; ptr != &_ebss; ptr++)
 		*ptr = 0;
 
-	opsy::CortexM::enableFpu();
-	__libc_init_array();
-	Bsp::initialize();
-	opsy::Scheduler::start();
+	opsy::Hooks::boot(SystemCoreClock);
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+	main();
+#pragma GCC diagnostic pop
+
 	asm volatile("bkpt 0"); // put a breakpoint because we are not supposed to arrive here
 }
 

@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <type_traits>
 #include <array>
+#include <cassert>
+
+#include <Hooks.hpp>
 
 using IsrHandler = void();
 
@@ -30,12 +33,12 @@ public:
 	{
 	}
 
-    template<IRQn_Type IRQ>
-    constexpr auto Register(IsrHandler* handler) -> InterruptVector
+    template<IRQn_Type IRQ, IsrHandler* handler>
+    constexpr auto Register() const -> InterruptVector
     {
         static_assert(IRQ < PeripheralIrqs);
 		auto tmp = m_peripherals;
-		tmp[IRQ] = handler;
+		tmp[IRQ] = opsy::Hooks::decorateIsr<handler>();
 		return InterruptVector(m_system, tmp);
     }
 
@@ -82,12 +85,13 @@ private:
         IsrHandler* Systick;
     };
 
-    constexpr InterruptVector(SystemIrq system, std::array<IsrHandler*, PeripheralIrqs> peripherals) :
+    constexpr InterruptVector(const SystemIrq system, const std::array<IsrHandler*, PeripheralIrqs> peripherals) :
             m_system(system), m_peripherals(peripherals)
         {
 
         }
 
-    SystemIrq m_system;
+public:
+    const SystemIrq m_system;
     std::array<IsrHandler*, PeripheralIrqs> m_peripherals{{}};
 };

@@ -19,7 +19,7 @@ public:
 		rcc.cfgr = 0; // resets clock configuration
 		rcc.cr &= ~(rcc_p::cr_r::pllon_f() | rcc_p::cr_r::csson_f() | rcc_p::cr_r::hseon_f()); // disable PLL, CSS, and HSE (external oscillator)
 		rcc.pllcfgr = rcc_p::pllcfgr_r::ResetValue; // reset value of PLL configuration register
-		rcc.cr &= ~rcc_p::cr_r::hsebyp_f(); // reset HSE bypass
+		rcc.cr &= !rcc_p::cr_r::hsebyp_f(); // reset HSE bypass
 		rcc.cir = 0; // reset all clock interrupts
 
 		rcc.cr |= rcc_p::cr_r::hseon_f(); // enable HSE
